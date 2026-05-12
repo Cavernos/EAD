@@ -1,0 +1,64 @@
+@startuml
+class org as "Organization" {
+- String name
+- String proprietaire
+- Building[] buildings
+}
+interface bat as "Building" {
+- Energy energy
+- int surface
++ Datetime getAnnualCost()
++ Datetime getMonthlyCost()
+
+
+}
+class loge as "Accomodation" {
+- String adresse
+- String proprietaire
+}
+
+class maison as "House" {
+}
+class appart as "Appartment" {
+}
+class univ as "University" {
+}
+class shop as "Shop" {
+}
+
+interface energy as "Energy" {
+- int estimated_cost
+- Datetime date
+- int quantity
+}
+
+class elec as "Electricity" {
+}
+
+class water as "Water" {
+}
+
+class gas as "Gas" {
+}
+
+class clim as "Climatisation" {}
+
+class sun as "Sun" {}
+
+univ --> bat
+shop --> bat
+org <|-- univ
+org <|-- shop
+
+
+
+bat <|-- loge
+loge <|-- maison
+loge <|-- appart
+bat --> energy
+energy <|-- water
+energy <|-- sun
+energy <|-- gas
+energy <|-- elec
+energy <|-- clim
+@enduml
