@@ -1,64 +1,236 @@
-@startuml
-class org as "Organization" {
-- String name
-- String proprietaire
-- Building[] buildings
+@startuml Smart_Energy_Manager
+
+skinparam classAttributeIconSize 0
+skinparam classFontStyle Bold
+skinparam shadowing false
+
+' ══════════════════════════════
+'           ENUM
+' ══════════════════════════════
+
+' ================================
+' Organisation
+'=================================
+
+
+class Organization {
+    #int id
+    - String name
+    - List<Building> buildings
+    - int numberOfBuildings
+    + addBuilding(b: Building): void
+    + removeBuilding(b: Building): void
+    + getBuildings(): List<Building>
+    + getTotalConsumption(): double
+    + getEstimatedCost(): double
+    + getMostConsumingBuilding(): Building
+    + getDailyConsumption(): double
+    + getMonthlyConsumption(): double
+    + getAnnualConsumption(): double
 }
-interface bat as "Building" {
-- Energy energy
-- int surface
-+ Datetime getAnnualCost()
-+ Datetime getMonthlyCost()
-
+class University {
+    - numberOfStudents: int
 
 }
-class loge as "Accomodation" {
-- String adresse
-- String proprietaire
+' ══════════════════════════════
+'   BUILDING (classe abstraite)
+' ══════════════════════════════
+
+class Building {
+  # int id
+  # String name
+  # String address
+  # double surface
+  # List<Energy> energyTypes
+  + addEnergy(e: Energy): void
+  + removeEnergy(e: Energy): void
+  + getEnergyTypes(): List<Energy>
+  + getTotalConsumption(): double
+  + getEstimatedCost(): double
+  + clone(): Building
 }
 
-class maison as "House" {
-}
-class appart as "Appartment" {
-}
-class univ as "University" {
-}
-class shop as "Shop" {
-}
+' ══════════════════════════════
+'    SOUS-CLASSES DE BUILDING
+' ══════════════════════════════
 
-interface energy as "Energy" {
-- int estimated_cost
-- Datetime date
-- int quantity
+class House {
+  - int numberOfRooms
+  - boolean hasGarden
 }
 
-class elec as "Electricity" {
+class Apartment {
+  - int floor
+  - String residenceName
 }
 
-class water as "Water" {
+class Office {
+  - int numberOfRooms
+  - int numberOfEmployees
 }
 
-class gas as "Gas" {
+class Shop {
+  - String activitySector
 }
 
-class clim as "Climatisation" {}
+' ══════════════════════════════
+'   ENERGY (classe abstraite)
+' ══════════════════════════════
 
-class sun as "Sun" {}
+class Energy {
+  # int id
+  # LocalDate date
+  # double quantity
+  # double pricePerUnit
+  + getEstimatedCost(): double
+  + getDate(): LocalDate
+  + getQuantity(): double
+}
 
-univ --> bat
-shop --> bat
-org <|-- univ
-org <|-- shop
+class Electricity {
+  - boolean isOffPeak
+  + getEstimatedCost(): double
+}
+
+class Water {
+  - boolean isHotWater
+  + getEstimatedCost(): double
+}
+
+class Gas {
+  + getEstimatedCost(): double
+}
+
+class Climatisation {
+  - double targetTemperature
+  + getEstimatedCost(): double
+}
+
+' ══════════════════════════════
+'           ALERT
+' ══════════════════════════════
+
+class Alert {
+  - String message
+  - AlertLevel level
+  - LocalDate date
+  - boolean isRead
+  + markAsRead(): void
+}
+
+' ══════════════════════════════
+'   DASHBOARD (vue principale)
+' ══════════════════════════════
+
+class Dashboard {
+  - List<Organisazion> organizations
+  + getAlerts(): List<Alert>
+}
+
+' ══════════════════════════════
+'     IMPORT / EXPORT / TEST
+' ══════════════════════════════
+
+class CSVHandler {
+  + importReadings(filePath: String): List<Energy>
+  + exportReadings(readings: List<Energy>, filePath: String): void
+}
+
+' ===============================
+' DAO
+' ===============================
+interface IDAO {
+- static int idSequence
++ create(Object object): Object
++ getById(int id): Object
++ remove(Object object): Object
++ update(Object object): Object
+}
+
+class BuildingDAO {
+
++ create(Building building): Building
++ getById(int id): Building
++ remove(Building building): Building
++ update(Building building): Building
+}
+
+class EnergyDAO {
++ create(Energy energy): Energy
++ getById(int id): Energy
++ remove(Energy energy): Energy
++ update(Energy energy): Energy
+}
+
+class OrganizationDAO {
++ create(Organization organization): Organization
++ getById(int id): Organization
++ remove(Organization organization): Organization
++ update(Organization organization): Organization
+}
+
+' ===============================
+' Controllers
+' ===============================
+class BuildingCrudController {
+}
+
+class EnergyCrudController {
+}
+
+class OrganizationCrudController {
+}
+
+' ==============================
+' Views
+' ==============================
+class BuildingView <<FXML_VIEW>> {
+
+}
+class OrganizationView <<FXML_VIEW>> {
+}
+
+class EnergyView <<FXML_VIEW>> {
+}
+
+' ══════════════════════════════
+'           RELATIONS
+' ══════════════════════════════
+' Héritage Organization
+Organization <|-- University
+' Héritage Building
+Building <|-- House
+Building <|-- Apartment
+Building <|-- Office
+Building <|-- Shop
 
 
+' Héritage Energy
+Energy <|-- Electricity
+Energy <|-- Water
+Energy <|-- Gas
+Energy <|-- Climatisation
 
-bat <|-- loge
-loge <|-- maison
-loge <|-- appart
-bat --> energy
-energy <|-- water
-energy <|-- sun
-energy <|-- gas
-energy <|-- elec
-energy <|-- clim
+' Héritage DAO
+IDAO <|-- EnergyDAO
+IDAO <|-- BuildingDAO
+IDAO <|-- OrganizationDAO
+
+' Composition
+Dashboard "1" *-- "0..*" Organization: gère
+Organization "0..*" *-- "0..*" Building : possèdent
+Building  "1" *-- "0..*" Energy   : enregistre
+Building  "1" *-- "0..*" Alert    : génère
+
+' Dépendances utilitaires
+CSVHandler   ..> Energy  : importe/exporte
+
+' MVC
+EnergyCrudController  <-- EnergyDAO: utilise
+EnergyCrudController <-- EnergyView: met à jour
+BuildingCrudController <-- BuildingDAO: utilise
+BuildingCrudController <-- BuildingView: met à jour
+OrganizationCrudController <-- OrganizationDAO: utilise
+OrganizationCrudController <-- OrganizationView: met à jour
 @enduml
+
