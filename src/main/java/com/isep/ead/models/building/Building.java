@@ -1,60 +1,40 @@
 package com.isep.ead.models.building;
 import com.isep.ead.models.Model;
 import com.isep.ead.models.alert.Alert;
-import com.isep.ead.models.alert.AlertLevel;
 import com.isep.ead.models.energy.Energy;
 import java.util.ArrayList;
 import java.util.List;
-public abstract class Building extends Model implements Cloneable {
+public class Building extends Model {
     protected int id;
     protected String name;
     protected String address;
     protected double surface;
-    protected List<Energy> energyList;
-    protected List<Alert> alertList;
-    private static final double WARNING_COST_THRESHOLD  = 1_000.0;
-    private static final double CRITICAL_COST_THRESHOLD = 5_000.0;
-    protected Building(String name, String address, double surface) {
+    protected List<Energy> energyTypes;
+    protected List<Alert> alerts;
+    public Building(String name, String address, double surface) {
         this.name = name;
         this.address = address;
         this.surface = surface;
-        this.energyList = new ArrayList<>();
-        this.alertList  = new ArrayList<>();
+        this.energyTypes = new ArrayList<>();
+        this.alerts = new ArrayList<>();
     }
-    public void addEnergy(Energy energy) {
-        if (energy != null) {
-            energyList.add(energy);
-            checkCostAlerts();
-        }
-    }
-    public void removeEnergy(Energy energy) { energyList.remove(energy); }
-    public List<Energy> getEnergyTypes() { return new ArrayList<>(energyList); }
+    public void addEnergy(Energy e) { if (e != null) energyTypes.add(e); }
+    public void removeEnergy(Energy e) { energyTypes.remove(e); }
+    public List<Energy> getEnergyTypes() { return new ArrayList<>(energyTypes); }
+    public List<Alert> getAlerts() { return new ArrayList<>(alerts); }
     public double getTotalConsumption() {
-        return energyList.stream().mapToDouble(Energy::getQuantity).sum();
+        return energyTypes.stream().mapToDouble(Energy::getQuantity).sum();
     }
     public double getEstimatedCost() {
-        return energyList.stream().mapToDouble(Energy::getEstimatedCost).sum();
-    }
-    public List<Alert> getAlerts() { return new ArrayList<>(alertList); }
-    public void addAlert(Alert alert) { if (alert != null) alertList.add(alert); }
-    private void checkCostAlerts() {
-        double cost = getEstimatedCost();
-        if (cost >= CRITICAL_COST_THRESHOLD) {
-            alertList.add(new Alert("Cout critique : " + String.format("%.2f", cost) + " EUR - " + name, AlertLevel.CRITICAL));
-        } else if (cost >= WARNING_COST_THRESHOLD) {
-            alertList.add(new Alert("Cout eleve : " + String.format("%.2f", cost) + " EUR - " + name, AlertLevel.WARNING));
-        }
+        return energyTypes.stream().mapToDouble(Energy::getEstimatedCost).sum();
     }
     @Override
-    public Building clone() {
-        try {
-            Building cloned   = (Building) super.clone();
-            cloned.energyList = new ArrayList<>(this.energyList);
-            cloned.alertList  = new ArrayList<>(this.alertList);
-            return cloned;
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
+    public String toCSV() { return id + "," + name + "," + address + "," + surface; }
+    public static Building fromCSV(String csv) {
+        String[] parts = csv.split(",");
+        Building b = new Building(parts[1], parts[2], Double.parseDouble(parts[3]));
+        b.setId(Integer.parseInt(parts[0]));
+        return b;
     }
     public int getId()                  { return id; }
     public void setId(int id)           { this.id = id; }
@@ -66,6 +46,6 @@ public abstract class Building extends Model implements Cloneable {
     public void setSurface(double s)    { this.surface = s; }
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "{id=" + id + ", name=" + name + ", address=" + address + ", surface=" + surface + ", cost=" + String.format("%.2f", getEstimatedCost()) + "}";
+        return getClass().getSimpleName() + "{id=" + id + ", name=" + name + ", address=" + address + ", surface=" + surface + "}";
     }
 }

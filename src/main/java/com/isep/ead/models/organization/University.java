@@ -5,9 +5,6 @@ public class University extends Organization {
         super(name);
         this.numberOfStudents = numberOfStudents;
     }
-    public double getConsumptionPerStudent() {
-        return numberOfStudents == 0 ? 0 : getTotalConsumption() / numberOfStudents;
-    }
     @Override
     public String toCSV() { return id + "," + getName() + "," + numberOfStudents; }
     public static University fromCSV(String csv) {
@@ -16,8 +13,8 @@ public class University extends Organization {
         u.setId(Integer.parseInt(parts[0]));
         return u;
     }
-    public int getNumberOfStudents()      { return numberOfStudents; }
-    public void setNumberOfStudents(int n){ this.numberOfStudents = n; }
+    public int getNumberOfStudents()        { return numberOfStudents; }
+    public void setNumberOfStudents(int n)  { this.numberOfStudents = n; }
     @Override
     public String toString() {
         return "University{id=" + id + ", name=" + getName() + ", students=" + numberOfStudents + ", buildings=" + getNumberOfBuildings() + "}";

@@ -1,20 +1,20 @@
 package com.isep.ead.models.energy;
 import java.time.LocalDate;
 public class Electricity extends Energy {
-    private boolean offPeak;
+    private boolean isOffPeak;
     private static final double OFF_PEAK_DISCOUNT = 0.30;
-    public Electricity(LocalDate date, double quantity, double pricePerUnit, boolean offPeak) {
+    public Electricity(LocalDate date, double quantity, double pricePerUnit, boolean isOffPeak) {
         super(date, quantity, pricePerUnit);
-        this.offPeak = offPeak;
+        this.isOffPeak = isOffPeak;
     }
     @Override
     public double getEstimatedCost() {
         double base = super.getEstimatedCost();
-        return offPeak ? base * (1 - OFF_PEAK_DISCOUNT) : base;
+        return isOffPeak ? base * (1 - OFF_PEAK_DISCOUNT) : base;
     }
     @Override
     public String toCSV() {
-        return id + "," + date + "," + quantity + "," + pricePerUnit + "," + offPeak;
+        return id + "," + date + "," + quantity + "," + pricePerUnit + "," + isOffPeak;
     }
     public static Electricity fromCSV(String csv) {
         String[] parts = csv.split(",");
@@ -22,6 +22,6 @@ public class Electricity extends Energy {
         e.setId(Integer.parseInt(parts[0]));
         return e;
     }
-    public boolean isOffPeak()           { return offPeak; }
-    public void setOffPeak(boolean val)  { this.offPeak = val; }
+    public boolean isOffPeak()              { return isOffPeak; }
+    public void setOffPeak(boolean isOffPeak) { this.isOffPeak = isOffPeak; }
 }

@@ -1,6 +1,6 @@
 package com.isep.ead.models;
-
-public abstract class Model implements IModel {
+public class Model implements IModel {
     @Override
-    public abstract String toCSV();
+    public String toCSV() { return ""; }
+    public static Model fromCSV(String csv) { return new Model(); }
 }
