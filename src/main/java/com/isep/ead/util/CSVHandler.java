@@ -1,6 +1,6 @@
 package com.isep.ead.util;
 
-import com.isep.ead.energy.*;
+import com.isep.ead.models.energy.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -8,50 +8,24 @@ import java.util.List;
 
 /**
  * Utilitaire d'import/export CSV pour les consommations énergétiques.
- * Format CSV attendu : TYPE;id;date;quantity;pricePerUnit;[champs spécifiques]
+ *
+ * Format CSV : id,date,quantity,pricePerUnit[,champsSpécifiques]
+ * Séparateur : virgule — sans préfixe de type.
+ *
+ * Comme il n'y a pas de préfixe de type dans le CSV, l'import nécessite
+ * de préciser la classe cible via {@link EnergyType}.
  */
 public class CSVHandler {
 
-    private static final String SEPARATOR = ";";
-
-    /**
-     * Importe une liste de consommations énergétiques depuis un fichier CSV.
-     *
-     * @param filePath chemin vers le fichier CSV
-     * @return liste des objets Energy désérialisés
-     * @throws IOException en cas d'erreur de lecture
-     */
-    public List<Energy> importReadings(String filePath) throws IOException {
-        List<Energy> readings = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            int lineNumber = 0;
-
-            while ((line = reader.readLine()) != null) {
-                lineNumber++;
-                line = line.trim();
-
-                if (line.isEmpty() || line.startsWith("#")) {
-                    continue; // Ignorer les lignes vides et les commentaires
-                }
-
-                try {
-                    Energy energy = parseLine(line);
-                    if (energy != null) {
-                        readings.add(energy);
-                    }
-                } catch (Exception e) {
-                    System.err.println("[CSVHandler] Ligne " + lineNumber + " ignorée (format invalide) : " + line);
-                }
-            }
-        }
-
-        return readings;
+    /** Énumère les types d'énergie supportés pour l'import. */
+    public enum EnergyType {
+        ELECTRICITY, WATER, GAS, CLIMATISATION
     }
 
+    // ── Export ────────────────────────────────────────────────
+
     /**
-     * Exporte une liste de consommations énergétiques dans un fichier CSV.
+     * Exporte une liste de consommations dans un fichier CSV.
      *
      * @param readings liste des Energy à exporter
      * @param filePath chemin du fichier de destination
@@ -61,9 +35,8 @@ public class CSVHandler {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writer.write("# Smart Energy Manager – Export CSV");
             writer.newLine();
-            writer.write("# TYPE;id;date;quantity;pricePerUnit;[specific fields]");
+            writer.write("# id,date,quantity,pricePerUnit[,specific fields]");
             writer.newLine();
-
             for (Energy energy : readings) {
                 writer.write(energy.toCSV());
                 writer.newLine();
@@ -71,20 +44,47 @@ public class CSVHandler {
         }
     }
 
+    // ── Import ────────────────────────────────────────────────
+
+    /**
+     * Importe des consommations depuis un fichier CSV en précisant le type d'énergie.
+     *
+     * @param filePath  chemin vers le fichier CSV
+     * @param type      type d'énergie des lignes à lire
+     * @return liste des Energy désérialisées
+     * @throws IOException en cas d'erreur de lecture
+     */
+    public List<Energy> importReadings(String filePath, EnergyType type) throws IOException {
+        List<Energy> readings = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            int lineNumber = 0;
+
+            while ((line = reader.readLine()) != null) {
+                lineNumber++;
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("#")) continue;
+
+                try {
+                    Energy energy = parseLine(line, type);
+                    if (energy != null) readings.add(energy);
+                } catch (Exception e) {
+                    System.err.println("[CSVHandler] Ligne " + lineNumber + " ignorée : " + line + " (" + e.getMessage() + ")");
+                }
+            }
+        }
+        return readings;
+    }
+
     // ── Parsing ───────────────────────────────────────────────
 
-    private Energy parseLine(String line) {
-        String type = line.split(SEPARATOR)[0].toUpperCase();
-
+    private Energy parseLine(String line, EnergyType type) {
         return switch (type) {
-            case "ELECTRICITY"   -> Electricity.fromCSV(line);
-            case "WATER"         -> Water.fromCSV(line);
-            case "GAS"           -> Gas.fromCSV(line);
-            case "CLIMATISATION" -> Climatisation.fromCSV(line);
-            default -> {
-                System.err.println("[CSVHandler] Type inconnu : " + type);
-                yield null;
-            }
+            case ELECTRICITY   -> Electricity.fromCSV(line);
+            case WATER         -> Water.fromCSV(line);
+            case GAS           -> Gas.fromCSV(line);
+            case CLIMATISATION -> Climatisation.fromCSV(line);
         };
     }
 }

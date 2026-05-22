@@ -1,4 +1,4 @@
-package com.isep.ead.energy;
+package com.isep.ead.models.energy;
 
 import java.time.LocalDate;
 
@@ -8,8 +8,9 @@ import java.time.LocalDate;
  */
 public class Gas extends Energy {
 
-    public Gas(int id, LocalDate date, double quantity, double pricePerUnit) {
-        super(id, date, quantity, pricePerUnit);
+    /** Constructeur principal — id auto-incrémenté par le DAO. */
+    public Gas(LocalDate date, double quantity, double pricePerUnit) {
+        super(date, quantity, pricePerUnit);
     }
 
     // ── Méthodes métier ───────────────────────────────────────
@@ -21,19 +22,21 @@ public class Gas extends Energy {
 
     // ── CSV ───────────────────────────────────────────────────
 
+    /** Format : id,date,quantity,pricePerUnit */
     @Override
     public String toCSV() {
-        return "GAS;" + id + ";" + date + ";" + quantity + ";" + pricePerUnit;
+        return id + "," + date + "," + quantity + "," + pricePerUnit;
     }
 
     public static Gas fromCSV(String csv) {
-        String[] parts = csv.split(";");
-        return new Gas(
-                Integer.parseInt(parts[1]),
-                LocalDate.parse(parts[2]),
-                Double.parseDouble(parts[3]),
-                Double.parseDouble(parts[4])
+        String[] p = csv.split(",");
+        Gas g = new Gas(
+                LocalDate.parse(p[1]),
+                Double.parseDouble(p[2]),
+                Double.parseDouble(p[3])
         );
+        g.setId(Integer.parseInt(p[0]));
+        return g;
     }
 }
 
