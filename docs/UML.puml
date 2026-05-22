@@ -7,7 +7,7 @@ skinparam shadowing false
 ' ══════════════════════════════
 '           ENUM
 ' ══════════════════════════════
-class Model {
+interface IModel {
     + String toCSV();
     + static Model fromCSV(String csv);
 }
