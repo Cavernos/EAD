@@ -9,8 +9,8 @@ public class Electricity extends Energy {
     }
     @Override
     public double getEstimatedCost() {
-        double base = super.getEstimatedCost();
-        return isOffPeak ? base * (1 - OFF_PEAK_DISCOUNT) : base;
+        double baseCost = super.getEstimatedCost();
+        return isOffPeak ? baseCost * (1 - OFF_PEAK_DISCOUNT) : baseCost;
     }
     @Override
     public String toCSV() {
@@ -18,10 +18,10 @@ public class Electricity extends Energy {
     }
     public static Electricity fromCSV(String csv) {
         String[] parts = csv.split(",");
-        Electricity e = new Electricity(LocalDate.parse(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3]), Boolean.parseBoolean(parts[4]));
-        e.setId(Integer.parseInt(parts[0]));
-        return e;
+        Electricity electricity = new Electricity(LocalDate.parse(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3]), Boolean.parseBoolean(parts[4]));
+        electricity.setId(Integer.parseInt(parts[0]));
+        return electricity;
     }
-    public boolean isOffPeak()              { return isOffPeak; }
+    public boolean isOffPeak()                { return isOffPeak; }
     public void setOffPeak(boolean isOffPeak) { this.isOffPeak = isOffPeak; }
 }

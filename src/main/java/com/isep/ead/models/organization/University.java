@@ -9,12 +9,12 @@ public class University extends Organization {
     public String toCSV() { return id + "," + getName() + "," + numberOfStudents; }
     public static University fromCSV(String csv) {
         String[] parts = csv.split(",");
-        University u = new University(parts[1], Integer.parseInt(parts[2]));
-        u.setId(Integer.parseInt(parts[0]));
-        return u;
+        University university = new University(parts[1], Integer.parseInt(parts[2]));
+        university.setId(Integer.parseInt(parts[0]));
+        return university;
     }
-    public int getNumberOfStudents()        { return numberOfStudents; }
-    public void setNumberOfStudents(int n)  { this.numberOfStudents = n; }
+    public int getNumberOfStudents()                        { return numberOfStudents; }
+    public void setNumberOfStudents(int numberOfStudents)   { this.numberOfStudents = numberOfStudents; }
     @Override
     public String toString() {
         return "University{id=" + id + ", name=" + getName() + ", students=" + numberOfStudents + ", buildings=" + getNumberOfBuildings() + "}";

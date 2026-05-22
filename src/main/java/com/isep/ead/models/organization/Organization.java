@@ -14,37 +14,37 @@ public class Organization extends Model {
         this.buildings = new ArrayList<>();
         this.numberOfBuildings = 0;
     }
-    public void addBuilding(Building b) {
-        if (b != null && !buildings.contains(b)) {
-            buildings.add(b);
+    public void addBuilding(Building building) {
+        if (building != null && !buildings.contains(building)) {
+            buildings.add(building);
             numberOfBuildings++;
         }
     }
-    public void removeBuilding(Building b) {
-        if (buildings.remove(b)) numberOfBuildings--;
+    public void removeBuilding(Building building) {
+        if (buildings.remove(building)) numberOfBuildings--;
     }
-    public List<Building> getBuildings()    { return new ArrayList<>(buildings); }
-    public int getNumberOfBuildings()       { return numberOfBuildings; }
-    public double getTotalConsumption()     { return buildings.stream().mapToDouble(Building::getTotalConsumption).sum(); }
-    public double getEstimatedCost()        { return buildings.stream().mapToDouble(Building::getEstimatedCost).sum(); }
+    public List<Building> getBuildings()      { return new ArrayList<>(buildings); }
+    public int getNumberOfBuildings()         { return numberOfBuildings; }
+    public double getTotalConsumption()       { return buildings.stream().mapToDouble(Building::getTotalConsumption).sum(); }
+    public double getEstimatedCost()          { return buildings.stream().mapToDouble(Building::getEstimatedCost).sum(); }
     public Building getMostConsumingBuilding() {
         return buildings.stream().max(Comparator.comparingDouble(Building::getTotalConsumption)).orElse(null);
     }
-    public double getDailyConsumption()     { return getTotalConsumption() / 365.0; }
-    public double getMonthlyConsumption()   { return getTotalConsumption() / 12.0; }
-    public double getAnnualConsumption()    { return getTotalConsumption(); }
+    public double getDailyConsumption()       { return getTotalConsumption() / 365.0; }
+    public double getMonthlyConsumption()     { return getTotalConsumption() / 12.0; }
+    public double getAnnualConsumption()      { return getTotalConsumption(); }
     @Override
     public String toCSV() { return id + "," + name; }
     public static Organization fromCSV(String csv) {
         String[] parts = csv.split(",");
-        Organization org = new Organization(parts[1]);
-        org.setId(Integer.parseInt(parts[0]));
-        return org;
+        Organization organization = new Organization(parts[1]);
+        organization.setId(Integer.parseInt(parts[0]));
+        return organization;
     }
-    public int getId()            { return id; }
-    public void setId(int id)     { this.id = id; }
-    public String getName()       { return name; }
-    public void setName(String n) { this.name = n; }
+    public int getId()              { return id; }
+    public void setId(int id)       { this.id = id; }
+    public String getName()         { return name; }
+    public void setName(String name){ this.name = name; }
     @Override
     public String toString() {
         return "Organization{id=" + id + ", name=" + name + ", buildings=" + numberOfBuildings + "}";

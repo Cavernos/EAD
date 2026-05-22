@@ -7,19 +7,18 @@ public class Office extends Building {
         this.numberOfRooms = numberOfRooms;
         this.numberOfEmployees = numberOfEmployees;
     }
-    /** Format : id,name,address,surface,numberOfRooms,numberOfEmployees */
     @Override
     public String toCSV() {
         return id + "," + name + "," + address + "," + surface + "," + numberOfRooms + "," + numberOfEmployees;
     }
     public static Office fromCSV(String csv) {
-        String[] p = csv.split(",");
-        Office o = new Office(p[1], p[2], Double.parseDouble(p[3]), Integer.parseInt(p[4]), Integer.parseInt(p[5]));
-        o.setId(Integer.parseInt(p[0]));
-        return o;
+        String[] parts = csv.split(",");
+        Office office = new Office(parts[1], parts[2], Double.parseDouble(parts[3]), Integer.parseInt(parts[4]), Integer.parseInt(parts[5]));
+        office.setId(Integer.parseInt(parts[0]));
+        return office;
     }
-    public int getNumberOfRooms() { return numberOfRooms; }
-    public void setNumberOfRooms(int n) { this.numberOfRooms = n; }
-    public int getNumberOfEmployees() { return numberOfEmployees; }
-    public void setNumberOfEmployees(int n) { this.numberOfEmployees = n; }
+    public int getNumberOfRooms()                        { return numberOfRooms; }
+    public void setNumberOfRooms(int numberOfRooms)      { this.numberOfRooms = numberOfRooms; }
+    public int getNumberOfEmployees()                    { return numberOfEmployees; }
+    public void setNumberOfEmployees(int numberOfEmployees) { this.numberOfEmployees = numberOfEmployees; }
 }

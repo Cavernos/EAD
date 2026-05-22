@@ -13,12 +13,12 @@ public class Apartment extends Building {
     }
     public static Apartment fromCSV(String csv) {
         String[] parts = csv.split(",");
-        Apartment a = new Apartment(parts[1], parts[2], Double.parseDouble(parts[3]), Integer.parseInt(parts[4]), parts[5]);
-        a.setId(Integer.parseInt(parts[0]));
-        return a;
+        Apartment apartment = new Apartment(parts[1], parts[2], Double.parseDouble(parts[3]), Integer.parseInt(parts[4]), parts[5]);
+        apartment.setId(Integer.parseInt(parts[0]));
+        return apartment;
     }
-    public int getFloor()                     { return floor; }
-    public void setFloor(int floor)           { this.floor = floor; }
-    public String getResidenceName()          { return residenceName; }
-    public void setResidenceName(String name) { this.residenceName = name; }
+    public int getFloor()                          { return floor; }
+    public void setFloor(int floor)                { this.floor = floor; }
+    public String getResidenceName()               { return residenceName; }
+    public void setResidenceName(String residenceName) { this.residenceName = residenceName; }
 }

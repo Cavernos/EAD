@@ -18,8 +18,8 @@ public class Building extends Model {
         this.energyTypes = new ArrayList<>();
         this.alerts = new ArrayList<>();
     }
-    public void addEnergy(Energy e) { if (e != null) energyTypes.add(e); }
-    public void removeEnergy(Energy e) { energyTypes.remove(e); }
+    public void addEnergy(Energy energy) { if (energy != null) energyTypes.add(energy); }
+    public void removeEnergy(Energy energy) { energyTypes.remove(energy); }
     public List<Energy> getEnergyTypes() { return new ArrayList<>(energyTypes); }
     public List<Alert> getAlerts() { return new ArrayList<>(alerts); }
     public double getTotalConsumption() {
@@ -32,18 +32,18 @@ public class Building extends Model {
     public String toCSV() { return id + "," + name + "," + address + "," + surface; }
     public static Building fromCSV(String csv) {
         String[] parts = csv.split(",");
-        Building b = new Building(parts[1], parts[2], Double.parseDouble(parts[3]));
-        b.setId(Integer.parseInt(parts[0]));
-        return b;
+        Building building = new Building(parts[1], parts[2], Double.parseDouble(parts[3]));
+        building.setId(Integer.parseInt(parts[0]));
+        return building;
     }
-    public int getId()                  { return id; }
-    public void setId(int id)           { this.id = id; }
-    public String getName()             { return name; }
-    public void setName(String name)    { this.name = name; }
-    public String getAddress()          { return address; }
-    public void setAddress(String addr) { this.address = addr; }
-    public double getSurface()          { return surface; }
-    public void setSurface(double s)    { this.surface = s; }
+    public int getId()                      { return id; }
+    public void setId(int id)               { this.id = id; }
+    public String getName()                 { return name; }
+    public void setName(String name)        { this.name = name; }
+    public String getAddress()              { return address; }
+    public void setAddress(String address)  { this.address = address; }
+    public double getSurface()              { return surface; }
+    public void setSurface(double surface)  { this.surface = surface; }
     @Override
     public String toString() {
         return getClass().getSimpleName() + "{id=" + id + ", name=" + name + ", address=" + address + ", surface=" + surface + "}";

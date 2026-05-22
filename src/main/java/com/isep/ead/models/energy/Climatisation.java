@@ -19,10 +19,10 @@ public class Climatisation extends Energy {
     }
     public static Climatisation fromCSV(String csv) {
         String[] parts = csv.split(",");
-        Climatisation c = new Climatisation(LocalDate.parse(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3]), Double.parseDouble(parts[4]));
-        c.setId(Integer.parseInt(parts[0]));
-        return c;
+        Climatisation climatisation = new Climatisation(LocalDate.parse(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3]), Double.parseDouble(parts[4]));
+        climatisation.setId(Integer.parseInt(parts[0]));
+        return climatisation;
     }
-    public double getTargetTemperature()             { return targetTemperature; }
-    public void setTargetTemperature(double temp)    { this.targetTemperature = temp; }
+    public double getTargetTemperature()                      { return targetTemperature; }
+    public void setTargetTemperature(double targetTemperature) { this.targetTemperature = targetTemperature; }
 }

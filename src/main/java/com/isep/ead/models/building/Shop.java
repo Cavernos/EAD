@@ -11,10 +11,10 @@ public class Shop extends Building {
     }
     public static Shop fromCSV(String csv) {
         String[] parts = csv.split(",");
-        Shop s = new Shop(parts[1], parts[2], Double.parseDouble(parts[3]), parts[4]);
-        s.setId(Integer.parseInt(parts[0]));
-        return s;
+        Shop shop = new Shop(parts[1], parts[2], Double.parseDouble(parts[3]), parts[4]);
+        shop.setId(Integer.parseInt(parts[0]));
+        return shop;
     }
-    public String getActivitySector()           { return activitySector; }
-    public void setActivitySector(String sector){ this.activitySector = sector; }
+    public String getActivitySector()                    { return activitySector; }
+    public void setActivitySector(String activitySector) { this.activitySector = activitySector; }
 }

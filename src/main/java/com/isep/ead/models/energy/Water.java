@@ -9,8 +9,8 @@ public class Water extends Energy {
     }
     @Override
     public double getEstimatedCost() {
-        double base = super.getEstimatedCost();
-        return isHotWater ? base * (1 + HOT_WATER_SURCHARGE) : base;
+        double baseCost = super.getEstimatedCost();
+        return isHotWater ? baseCost * (1 + HOT_WATER_SURCHARGE) : baseCost;
     }
     @Override
     public String toCSV() {
@@ -18,10 +18,10 @@ public class Water extends Energy {
     }
     public static Water fromCSV(String csv) {
         String[] parts = csv.split(",");
-        Water w = new Water(LocalDate.parse(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3]), Boolean.parseBoolean(parts[4]));
-        w.setId(Integer.parseInt(parts[0]));
-        return w;
+        Water water = new Water(LocalDate.parse(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3]), Boolean.parseBoolean(parts[4]));
+        water.setId(Integer.parseInt(parts[0]));
+        return water;
     }
     public boolean isHotWater()                 { return isHotWater; }
-    public void setHotWater(boolean isHotWater)  { this.isHotWater = isHotWater; }
+    public void setHotWater(boolean isHotWater) { this.isHotWater = isHotWater; }
 }

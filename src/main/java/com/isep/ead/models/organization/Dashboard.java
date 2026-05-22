@@ -5,14 +5,14 @@ import java.util.List;
 public class Dashboard {
     private List<Organization> organizations;
     public Dashboard() { this.organizations = new ArrayList<>(); }
-    public void addOrganization(Organization org) {
-        if (org != null && !organizations.contains(org)) organizations.add(org);
+    public void addOrganization(Organization organization) {
+        if (organization != null && !organizations.contains(organization)) organizations.add(organization);
     }
-    public void removeOrganization(Organization org) { organizations.remove(org); }
+    public void removeOrganization(Organization organization) { organizations.remove(organization); }
     public List<Organization> getOrganizations() { return new ArrayList<>(organizations); }
     public List<Alert> getAlerts() {
         List<Alert> alerts = new ArrayList<>();
-        organizations.forEach(org -> org.getBuildings().forEach(b -> alerts.addAll(b.getAlerts())));
+        organizations.forEach(organization -> organization.getBuildings().forEach(building -> alerts.addAll(building.getAlerts())));
         return alerts;
     }
     @Override

@@ -10,8 +10,8 @@ public class Gas extends Energy {
     }
     public static Gas fromCSV(String csv) {
         String[] parts = csv.split(",");
-        Gas g = new Gas(LocalDate.parse(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3]));
-        g.setId(Integer.parseInt(parts[0]));
-        return g;
+        Gas gas = new Gas(LocalDate.parse(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3]));
+        gas.setId(Integer.parseInt(parts[0]));
+        return gas;
     }
 }
