@@ -7,7 +7,10 @@ skinparam shadowing false
 ' ══════════════════════════════
 '           ENUM
 ' ══════════════════════════════
-
+class Model {
+    + String toCSV();
+    + static Model fromCSV(String csv);
+}
 ' ================================
 ' Organisation
 '=================================
@@ -196,6 +199,11 @@ class EnergyView <<FXML_VIEW>> {
 ' ══════════════════════════════
 '           RELATIONS
 ' ══════════════════════════════
+
+'Heritage de Model
+Model <|-- Organization
+Model <|-- Building
+Model <|-- Energy
 ' Héritage Organization
 Organization <|-- University
 ' Héritage Building
