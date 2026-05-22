@@ -1,125 +1,71 @@
 package com.isep.ead.models.building;
-
 import com.isep.ead.models.Model;
 import com.isep.ead.models.alert.Alert;
 import com.isep.ead.models.alert.AlertLevel;
 import com.isep.ead.models.energy.Energy;
-
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Classe abstraite représentant un bâtiment.
- * L'id est géré par le DAO (auto-incrémenté) et ne figure pas dans le constructeur.
- */
 public abstract class Building extends Model implements Cloneable {
-
     protected int id;
     protected String name;
     protected String address;
     protected double surface;
-
-    protected List<Energy> energyTypes;
-    protected List<Alert>  alerts;
-
-    private static final double COST_WARNING_THRESHOLD  = 1_000.0;
-    private static final double COST_CRITICAL_THRESHOLD = 5_000.0;
-
-    /** Constructeur principal — id auto-incrémenté par le DAO. */
+    protected List<Energy> energyList;
+    protected List<Alert> alertList;
+    private static final double WARNING_COST_THRESHOLD  = 1_000.0;
+    private static final double CRITICAL_COST_THRESHOLD = 5_000.0;
     protected Building(String name, String address, double surface) {
-        this.name        = name;
-        this.address     = address;
-        this.surface     = surface;
-        this.energyTypes = new ArrayList<>();
-        this.alerts      = new ArrayList<>();
+        this.name = name;
+        this.address = address;
+        this.surface = surface;
+        this.energyList = new ArrayList<>();
+        this.alertList  = new ArrayList<>();
     }
-
-    // ── Gestion des énergies ──────────────────────────────────
-
-    public void addEnergy(Energy e) {
-        if (e != null) {
-            energyTypes.add(e);
-            checkAndGenerateAlerts();
+    public void addEnergy(Energy energy) {
+        if (energy != null) {
+            energyList.add(energy);
+            checkCostAlerts();
         }
     }
-
-    public void removeEnergy(Energy e) {
-        energyTypes.remove(e);
-    }
-
-    public List<Energy> getEnergyTypes() {
-        return new ArrayList<>(energyTypes);
-    }
-
-    // ── Calculs métier ────────────────────────────────────────
-
+    public void removeEnergy(Energy energy) { energyList.remove(energy); }
+    public List<Energy> getEnergyTypes() { return new ArrayList<>(energyList); }
     public double getTotalConsumption() {
-        return energyTypes.stream().mapToDouble(Energy::getQuantity).sum();
+        return energyList.stream().mapToDouble(Energy::getQuantity).sum();
     }
-
     public double getEstimatedCost() {
-        return energyTypes.stream().mapToDouble(Energy::getEstimatedCost).sum();
+        return energyList.stream().mapToDouble(Energy::getEstimatedCost).sum();
     }
-
-    // ── Gestion des alertes ───────────────────────────────────
-
-    public List<Alert> getAlerts() {
-        return new ArrayList<>(alerts);
-    }
-
-    public void addAlert(Alert alert) {
-        if (alert != null) alerts.add(alert);
-    }
-
-    private void checkAndGenerateAlerts() {
+    public List<Alert> getAlerts() { return new ArrayList<>(alertList); }
+    public void addAlert(Alert alert) { if (alert != null) alertList.add(alert); }
+    private void checkCostAlerts() {
         double cost = getEstimatedCost();
-        if (cost >= COST_CRITICAL_THRESHOLD) {
-            alerts.add(new Alert(
-                    "Coût critique : " + String.format("%.2f", cost) + " € – " + name,
-                    AlertLevel.CRITICAL
-            ));
-        } else if (cost >= COST_WARNING_THRESHOLD) {
-            alerts.add(new Alert(
-                    "Coût élevé : " + String.format("%.2f", cost) + " € – " + name,
-                    AlertLevel.WARNING
-            ));
+        if (cost >= CRITICAL_COST_THRESHOLD) {
+            alertList.add(new Alert("Cout critique : " + String.format("%.2f", cost) + " EUR - " + name, AlertLevel.CRITICAL));
+        } else if (cost >= WARNING_COST_THRESHOLD) {
+            alertList.add(new Alert("Cout eleve : " + String.format("%.2f", cost) + " EUR - " + name, AlertLevel.WARNING));
         }
     }
-
-    // ── Clone ─────────────────────────────────────────────────
-
     @Override
     public Building clone() {
         try {
-            Building cloned      = (Building) super.clone();
-            cloned.energyTypes   = new ArrayList<>(this.energyTypes);
-            cloned.alerts        = new ArrayList<>(this.alerts);
+            Building cloned   = (Building) super.clone();
+            cloned.energyList = new ArrayList<>(this.energyList);
+            cloned.alertList  = new ArrayList<>(this.alertList);
             return cloned;
         } catch (CloneNotSupportedException e) {
-            throw new RuntimeException("Clonage impossible pour " + getClass().getSimpleName(), e);
+            throw new RuntimeException(e);
         }
     }
-
-    // ── Getters / Setters ─────────────────────────────────────
-
-    public int getId()                   { return id; }
-    public void setId(int id)            { this.id = id; }
-
-    public String getName()              { return name; }
-    public void setName(String name)     { this.name = name; }
-
-    public String getAddress()           { return address; }
-    public void setAddress(String addr)  { this.address = addr; }
-
-    public double getSurface()           { return surface; }
-    public void setSurface(double s)     { this.surface = s; }
-
+    public int getId()                  { return id; }
+    public void setId(int id)           { this.id = id; }
+    public String getName()             { return name; }
+    public void setName(String name)    { this.name = name; }
+    public String getAddress()          { return address; }
+    public void setAddress(String addr) { this.address = addr; }
+    public double getSurface()          { return surface; }
+    public void setSurface(double s)    { this.surface = s; }
     @Override
     public String toString() {
-        return getClass().getSimpleName()
-                + "{id=" + id + ", name='" + name + "', address='" + address
-                + "', surface=" + surface
-                + ", totalCost=" + String.format("%.2f", getEstimatedCost()) + "€}";
+        return getClass().getSimpleName() + "{id=" + id + ", name=" + name + ", address=" + address + ", surface=" + surface + ", cost=" + String.format("%.2f", getEstimatedCost()) + "}";
     }
 }
-

@@ -3,17 +3,19 @@ import com.isep.ead.models.alert.Alert;
 import java.util.ArrayList;
 import java.util.List;
 public class Dashboard {
-    private List<Organization> organizations;
-    public Dashboard() { this.organizations = new ArrayList<>(); }
-    public void addOrganization(Organization org) { if (org != null && !organizations.contains(org)) organizations.add(org); }
-    public void removeOrganization(Organization org) { organizations.remove(org); }
-    public List<Organization> getOrganizations() { return new ArrayList<>(organizations); }
-    public double getTotalEstimatedCost() { return organizations.stream().mapToDouble(Organization::getEstimatedCost).sum(); }
-    public double getTotalConsumption()   { return organizations.stream().mapToDouble(Organization::getTotalConsumption).sum(); }
+    private List<Organization> organizationList;
+    public Dashboard() { this.organizationList = new ArrayList<>(); }
+    public void addOrganization(Organization org) {
+        if (org != null && !organizationList.contains(org)) organizationList.add(org);
+    }
+    public void removeOrganization(Organization org) { organizationList.remove(org); }
+    public List<Organization> getOrganizations() { return new ArrayList<>(organizationList); }
+    public double getTotalEstimatedCost() { return organizationList.stream().mapToDouble(Organization::getEstimatedCost).sum(); }
+    public double getTotalConsumption()   { return organizationList.stream().mapToDouble(Organization::getTotalConsumption).sum(); }
     public List<Alert> getAlerts() {
-        List<Alert> all = new ArrayList<>();
-        organizations.forEach(org -> org.getBuildings().forEach(b -> all.addAll(b.getAlerts())));
-        return all;
+        List<Alert> alerts = new ArrayList<>();
+        organizationList.forEach(org -> org.getBuildings().forEach(b -> alerts.addAll(b.getAlerts())));
+        return alerts;
     }
     public List<Alert> getUnreadAlerts() {
         List<Alert> unread = new ArrayList<>();
@@ -22,6 +24,6 @@ public class Dashboard {
     }
     @Override
     public String toString() {
-        return "Dashboard{organizations=" + organizations.size() + ", totalCost=" + String.format("%.2f", getTotalEstimatedCost()) + "EUR, unreadAlerts=" + getUnreadAlerts().size() + "}";
+        return "Dashboard{organizations=" + organizationList.size() + ", cost=" + String.format("%.2f", getTotalEstimatedCost()) + ", unreadAlerts=" + getUnreadAlerts().size() + "}";
     }
 }

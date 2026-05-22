@@ -1,74 +1,45 @@
 package com.isep.ead.models.alert;
-
 import java.time.LocalDate;
-
-/**
- * Représente une alerte de consommation associée à un bâtiment.
- */
 public class Alert {
-
     private int id;
     private String message;
     private AlertLevel level;
     private LocalDate date;
-    private boolean isRead;
-
-    /** Constructeur principal — id auto-incrémenté par le DAO. */
+    private boolean read;
     public Alert(String message, AlertLevel level) {
         this.message = message;
         this.level = level;
         this.date = LocalDate.now();
-        this.isRead = false;
+        this.read = false;
     }
-
     public Alert(String message, AlertLevel level, LocalDate date) {
         this.message = message;
         this.level = level;
         this.date = date;
-        this.isRead = false;
+        this.read = false;
     }
-
-    // ── Actions ───────────────────────────────────────────────
-
-    /** Marque l'alerte comme lue. */
-    public void markAsRead() {
-        this.isRead = true;
-    }
-
-    // ── CSV ───────────────────────────────────────────────────
-
-    /** Format : id,message,level,date,isRead */
+    public void markAsRead() { this.read = true; }
     public String toCSV() {
-        return id + "," + message + "," + level + "," + date + "," + isRead;
+        return id + "," + message + "," + level + "," + date + "," + read;
     }
-
     public static Alert fromCSV(String csv) {
-        String[] p = csv.split(",", 5);
-        Alert a = new Alert(p[1], AlertLevel.valueOf(p[2]), LocalDate.parse(p[3]));
-        a.setId(Integer.parseInt(p[0]));
-        a.isRead = Boolean.parseBoolean(p[4]);
-        return a;
+        String[] parts = csv.split(",", 5);
+        Alert alert = new Alert(parts[1], AlertLevel.valueOf(parts[2]), LocalDate.parse(parts[3]));
+        alert.setId(Integer.parseInt(parts[0]));
+        alert.read = Boolean.parseBoolean(parts[4]);
+        return alert;
     }
-
-    // ── Getters / Setters ─────────────────────────────────────
-
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-
-    public String getMessage() { return message; }
+    public int getId()                     { return id; }
+    public void setId(int id)              { this.id = id; }
+    public String getMessage()             { return message; }
     public void setMessage(String message) { this.message = message; }
-
-    public AlertLevel getLevel() { return level; }
+    public AlertLevel getLevel()           { return level; }
     public void setLevel(AlertLevel level) { this.level = level; }
-
-    public LocalDate getDate() { return date; }
-    public void setDate(LocalDate date) { this.date = date; }
-
-    public boolean isRead() { return isRead; }
-
+    public LocalDate getDate()             { return date; }
+    public void setDate(LocalDate date)    { this.date = date; }
+    public boolean isRead()                { return read; }
     @Override
     public String toString() {
-        return "[" + level + "] " + date + " – " + message + (isRead ? " (lu)" : " (non lu)");
+        return "[" + level + "] " + date + " - " + message + (read ? " (lu)" : "");
     }
 }
-

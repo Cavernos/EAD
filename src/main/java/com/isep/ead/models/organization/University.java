@@ -6,22 +6,20 @@ public class University extends Organization {
         this.numberOfStudents = numberOfStudents;
     }
     public double getConsumptionPerStudent() {
-        if (numberOfStudents == 0) return 0;
-        return getTotalConsumption() / numberOfStudents;
+        return numberOfStudents == 0 ? 0 : getTotalConsumption() / numberOfStudents;
     }
-    /** Format : id,name,numberOfStudents */
     @Override
     public String toCSV() { return id + "," + getName() + "," + numberOfStudents; }
     public static University fromCSV(String csv) {
-        String[] p = csv.split(",");
-        University u = new University(p[1], Integer.parseInt(p[2]));
-        u.setId(Integer.parseInt(p[0]));
+        String[] parts = csv.split(",");
+        University u = new University(parts[1], Integer.parseInt(parts[2]));
+        u.setId(Integer.parseInt(parts[0]));
         return u;
     }
-    public int getNumberOfStudents() { return numberOfStudents; }
-    public void setNumberOfStudents(int n) { this.numberOfStudents = n; }
+    public int getNumberOfStudents()      { return numberOfStudents; }
+    public void setNumberOfStudents(int n){ this.numberOfStudents = n; }
     @Override
     public String toString() {
-        return "University{id=" + id + ", name='" + getName() + "', students=" + numberOfStudents + ", buildings=" + getNumberOfBuildings() + "}";
+        return "University{id=" + id + ", name=" + getName() + ", students=" + numberOfStudents + ", buildings=" + getNumberOfBuildings() + "}";
     }
 }
