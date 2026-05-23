@@ -8,8 +8,11 @@ skinparam shadowing false
 '           ENUM
 ' ══════════════════════════════
 interface IModel {
+    - int id;
+    + void setId(int id);
+    + int getId();
     + String toCSV();
-    + static Model fromCSV(String csv);
+    + static IModel fromCSV(String[] fields);
 }
 ' ================================
 ' Organisation
@@ -50,7 +53,6 @@ class Building {
   + getEnergyTypes(): List<Energy>
   + getTotalConsumption(): double
   + getEstimatedCost(): double
-  + clone(): Building
 }
 
 ' ══════════════════════════════
@@ -135,42 +137,36 @@ class Dashboard {
 ' ══════════════════════════════
 
 class CSVHandler {
-  + importReadings(filePath: String): List<Energy>
-  + exportReadings(readings: List<Energy>, filePath: String): void
+  - String filename
+  + void write(String row)
+  + void write(String[] rows)
+  + void remove(int id)
+  + String update(int id, String newRow)
+  - void flushFile(String[] rows)
+  + String getLastRow()
+  + String[] read()
 }
+
 
 ' ===============================
 ' DAO
 ' ===============================
-interface IDAO {
+interface IDAO<T> {
 - static int idSequence
-+ create(Object object): Object
-+ getById(int id): Object
-+ remove(Object object): Object
-+ update(Object object): Object
++ create(T object): T
++ getById(int id): T
++ remove(T object): T
++ update(T object): T
 }
 
-class BuildingDAO {
+class DAO<T extends IModel> {
 
-+ create(Building building): Building
-+ getById(int id): Building
-+ remove(Building building): Building
-+ update(Building building): Building
++ create(IModel building): IModel
++ getById(int id): IModel
++ remove(IModel building): IModel
++ update(IModel building): IModel
 }
 
-class EnergyDAO {
-+ create(Energy energy): Energy
-+ getById(int id): Energy
-+ remove(Energy energy): Energy
-+ update(Energy energy): Energy
-}
-
-class OrganizationDAO {
-+ create(Organization organization): Organization
-+ getById(int id): Organization
-+ remove(Organization organization): Organization
-+ update(Organization organization): Organization
-}
 
 ' ===============================
 ' Controllers
@@ -201,9 +197,9 @@ class EnergyView <<FXML_VIEW>> {
 ' ══════════════════════════════
 
 'Heritage de Model
-Model <|-- Organization
-Model <|-- Building
-Model <|-- Energy
+IModel <|-- Organization
+IModel <|-- Building
+IModel <|-- Energy
 ' Héritage Organization
 Organization <|-- University
 ' Héritage Building
@@ -220,9 +216,8 @@ Energy <|-- Gas
 Energy <|-- Climatisation
 
 ' Héritage DAO
-IDAO <|-- EnergyDAO
-IDAO <|-- BuildingDAO
-IDAO <|-- OrganizationDAO
+IDAO <|-- DAO
+
 
 ' Composition
 Dashboard "1" *-- "0..*" Organization: gère
@@ -231,12 +226,12 @@ Building  "1" *-- "0..*" Energy   : enregistre
 Building  "1" *-- "0..*" Alert    : génère
 
 ' Dépendances utilitaires
-CSVHandler   ..> Energy  : importe/exporte
+CSVHandler   ..> DAO  : importe/exporte
 
 ' MVC
 EnergyCrudController  <-- EnergyDAO: utilise
 EnergyCrudController <-- EnergyView: met à jour
-BuildingCrudController <-- BuildingDAO: utilise
+BuildingCrudController <-- DAO: utilise
 BuildingCrudController <-- BuildingView: met à jour
 OrganizationCrudController <-- OrganizationDAO: utilise
 OrganizationCrudController <-- OrganizationView: met à jour

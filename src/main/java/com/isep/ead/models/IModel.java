@@ -11,5 +11,25 @@ public interface IModel {
      * @return représentation CSV de l'objet
      */
     String toCSV();
+    static IModel fromCSV(String[] fields) {
+        return new Model() {
+            @Override
+            public String toCSV() {
+                return "";
+            }
+
+            @Override
+            public int getId() {
+                return 0;
+            }
+
+            @Override
+            public void setId(int id) {
+
+            }
+        };
+    };
+    int getId();
+    void setId(int id);
 }
 

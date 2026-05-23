@@ -1,7 +1,8 @@
 package com.isep.ead;
 
-import com.isep.ead.dao.BuildingDAO;
-import com.isep.ead.models.buildings.Building;
+
+import com.isep.ead.dao.DAO;
+import com.isep.ead.models.building.Building;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,10 +19,10 @@ public class EADApplication extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();*/
-        BuildingDAO buildingDAO = new BuildingDAO();
+        DAO<Building> buildingDAO = new DAO<>();
         for (int i = 0; i<7; i++) {
             buildingDAO.create(
-                    new Building("Toto")
+                    new Building("Toto", "a", 33.0)
             );
         }
         buildingDAO.remove(buildingDAO.getById(4));

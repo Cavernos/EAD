@@ -12,7 +12,7 @@ import java.util.List;
  * Classe abstraite représentant un bâtiment.
  * L'id est géré par le DAO (auto-incrémenté) et ne figure pas dans le constructeur.
  */
-public abstract class Building extends Model implements Cloneable {
+public class Building extends Model implements Cloneable {
 
     protected int id;
     protected String name;
@@ -26,7 +26,7 @@ public abstract class Building extends Model implements Cloneable {
     private static final double COST_CRITICAL_THRESHOLD = 5_000.0;
 
     /** Constructeur principal — id auto-incrémenté par le DAO. */
-    protected Building(String name, String address, double surface) {
+    public Building(String name, String address, double surface) {
         this.name        = name;
         this.address     = address;
         this.surface     = surface;
@@ -120,6 +120,17 @@ public abstract class Building extends Model implements Cloneable {
                 + "{id=" + id + ", name='" + name + "', address='" + address
                 + "', surface=" + surface
                 + ", totalCost=" + String.format("%.2f", getEstimatedCost()) + "€}";
+    }
+
+    @Override
+    public String toCSV() {
+        return "";
+    }
+
+    public static Building fromCSV(String[] fields) {
+        Building building = new Building(fields[1], fields[2], Double.parseDouble(fields[3]));
+        building.setId(Integer.parseInt(fields[0]));
+        return building;
     }
 }
 
