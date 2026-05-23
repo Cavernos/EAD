@@ -1,36 +1,33 @@
-       package com.isep.ead.models.building;
+package com.isep.ead.models.building;
 
-/**
- * Commerce / boutique.
- */
 public class Shop extends Building {
 
     private String activitySector;
 
-    /** Constructeur principal — id auto-incrémenté par le DAO. */
     public Shop(String name, String address, double surface, String activitySector) {
         super(name, address, surface);
         this.activitySector = activitySector;
     }
 
-    // ── CSV ───────────────────────────────────────────────────
 
-    /** Format : id,name,address,surface,activitySector */
     @Override
     public String toCSV() {
         return id + "," + name + "," + address + "," + surface + "," + activitySector;
     }
 
-    public static Shop fromCSV(String csv) {
-        String[] p = csv.split(",");
-        Shop s = new Shop(p[1], p[2], Double.parseDouble(p[3]), p[4]);
-        s.setId(Integer.parseInt(p[0]));
-        return s;
+    public Shop fromCSV(String[] fields) {
+        Shop shop = new Shop(fields[1], fields[2], Double.parseDouble(fields[3]), fields[4]);
+        shop.setId(Integer.parseInt(fields[0]));
+        return shop;
     }
 
-    // ── Getters / Setters ─────────────────────────────────────
 
-    public String getActivitySector()          { return activitySector; }
-    public void   setActivitySector(String s)  { this.activitySector = s; }
+    public String getActivitySector() {
+        return activitySector;
+    }
+
+    public void setActivitySector(String s) {
+        this.activitySector = s;
+    }
 }
 

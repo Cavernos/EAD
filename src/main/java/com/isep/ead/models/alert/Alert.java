@@ -2,9 +2,7 @@ package com.isep.ead.models.alert;
 
 import java.time.LocalDate;
 
-/**
- * Représente une alerte de consommation associée à un bâtiment.
- */
+
 public class Alert {
 
     private int id;
@@ -13,7 +11,7 @@ public class Alert {
     private LocalDate date;
     private boolean isRead;
 
-    /** Constructeur principal — id auto-incrémenté par le DAO. */
+
     public Alert(String message, AlertLevel level) {
         this.message = message;
         this.level = level;
@@ -27,44 +25,58 @@ public class Alert {
         this.date = date;
         this.isRead = false;
     }
-
-    // ── Actions ───────────────────────────────────────────────
-
-    /** Marque l'alerte comme lue. */
+    
     public void markAsRead() {
         this.isRead = true;
     }
 
-    // ── CSV ───────────────────────────────────────────────────
 
-    /** Format : id,message,level,date,isRead */
     public String toCSV() {
         return id + "," + message + "," + level + "," + date + "," + isRead;
     }
 
-    public static Alert fromCSV(String csv) {
-        String[] p = csv.split(",", 5);
-        Alert a = new Alert(p[1], AlertLevel.valueOf(p[2]), LocalDate.parse(p[3]));
-        a.setId(Integer.parseInt(p[0]));
-        a.isRead = Boolean.parseBoolean(p[4]);
-        return a;
+    public Alert fromCSV(String[] fields) {
+        Alert alert = new Alert(fields[1], AlertLevel.valueOf(fields[2]), LocalDate.parse(fields[3]));
+        alert.setId(Integer.parseInt(fields[0]));
+        alert.isRead = Boolean.parseBoolean(fields[4]);
+        return alert;
     }
 
-    // ── Getters / Setters ─────────────────────────────────────
+    public int getId() {
+        return id;
+    }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
+    public String getMessage() {
+        return message;
+    }
 
-    public AlertLevel getLevel() { return level; }
-    public void setLevel(AlertLevel level) { this.level = level; }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-    public LocalDate getDate() { return date; }
-    public void setDate(LocalDate date) { this.date = date; }
+    public AlertLevel getLevel() {
+        return level;
+    }
 
-    public boolean isRead() { return isRead; }
+    public void setLevel(AlertLevel level) {
+        this.level = level;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
 
     @Override
     public String toString() {

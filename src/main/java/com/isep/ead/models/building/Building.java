@@ -1,6 +1,6 @@
 package com.isep.ead.models.building;
 
-import com.isep.ead.models.Model;
+import com.isep.ead.models.IModel;
 import com.isep.ead.models.alert.Alert;
 import com.isep.ead.models.alert.AlertLevel;
 import com.isep.ead.models.energy.Energy;
@@ -8,11 +8,8 @@ import com.isep.ead.models.energy.Energy;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Classe abstraite représentant un bâtiment.
- * L'id est géré par le DAO (auto-incrémenté) et ne figure pas dans le constructeur.
- */
-public class Building extends Model implements Cloneable {
+
+public class Building implements IModel<Building> {
 
     protected int id;
     protected String name;
@@ -25,7 +22,9 @@ public class Building extends Model implements Cloneable {
     private static final double COST_WARNING_THRESHOLD  = 1_000.0;
     private static final double COST_CRITICAL_THRESHOLD = 5_000.0;
 
-    /** Constructeur principal — id auto-incrémenté par le DAO. */
+    public Building() {
+
+    }
     public Building(String name, String address, double surface) {
         this.name        = name;
         this.address     = address;
@@ -34,7 +33,7 @@ public class Building extends Model implements Cloneable {
         this.alerts      = new ArrayList<>();
     }
 
-    // ── Gestion des énergies ──────────────────────────────────
+
 
     public void addEnergy(Energy e) {
         if (e != null) {
@@ -51,7 +50,7 @@ public class Building extends Model implements Cloneable {
         return new ArrayList<>(energyTypes);
     }
 
-    // ── Calculs métier ────────────────────────────────────────
+
 
     public double getTotalConsumption() {
         return energyTypes.stream().mapToDouble(Energy::getQuantity).sum();
@@ -61,7 +60,7 @@ public class Building extends Model implements Cloneable {
         return energyTypes.stream().mapToDouble(Energy::getEstimatedCost).sum();
     }
 
-    // ── Gestion des alertes ───────────────────────────────────
+
 
     public List<Alert> getAlerts() {
         return new ArrayList<>(alerts);
@@ -86,21 +85,7 @@ public class Building extends Model implements Cloneable {
         }
     }
 
-    // ── Clone ─────────────────────────────────────────────────
 
-    @Override
-    public Building clone() {
-        try {
-            Building cloned      = (Building) super.clone();
-            cloned.energyTypes   = new ArrayList<>(this.energyTypes);
-            cloned.alerts        = new ArrayList<>(this.alerts);
-            return cloned;
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException("Clonage impossible pour " + getClass().getSimpleName(), e);
-        }
-    }
-
-    // ── Getters / Setters ─────────────────────────────────────
 
     public int getId()                   { return id; }
     public void setId(int id)            { this.id = id; }
@@ -124,10 +109,11 @@ public class Building extends Model implements Cloneable {
 
     @Override
     public String toCSV() {
-        return "";
+        return String.format("%s,%s,%s,%s", this.id,this.name, this.address, this.surface);
     }
 
-    public static Building fromCSV(String[] fields) {
+    @Override
+    public Building fromCSV(String[] fields) {
         Building building = new Building(fields[1], fields[2], Double.parseDouble(fields[3]));
         building.setId(Integer.parseInt(fields[0]));
         return building;

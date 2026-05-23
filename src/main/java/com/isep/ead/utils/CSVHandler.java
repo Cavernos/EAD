@@ -35,6 +35,7 @@ public class CSVHandler {
     }
 
     public String update(int id, String newRow) {
+
         String[] rows = this.read();
         for (int i = 0; i< rows.length; i++) {
             if(Integer.parseInt(rows[i].split(",")[0]) == id) {
@@ -57,8 +58,12 @@ public class CSVHandler {
 
     public String getLastRow() {
         String[] rows = this.read();
-        return rows[rows.length - 1];
+        if (rows.length > 0) {
+            return rows[rows.length - 1];
+        }
+        return "";
     }
+
     public String[] read() {
         ArrayList<String> rows = new ArrayList<>();
         if(!(new File(this.filename)).exists()) return new String[]{"0"};

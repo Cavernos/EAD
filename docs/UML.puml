@@ -7,15 +7,33 @@ skinparam shadowing false
 ' ══════════════════════════════
 '           ENUM
 ' ══════════════════════════════
-interface IModel {
+interface IModel<T> {
     - int id;
     + void setId(int id);
     + int getId();
     + String toCSV();
-    + static IModel fromCSV(String[] fields);
+    + T fromCSV(String[] fields);
+}
+' ===============================
+' DAO
+' ===============================
+interface IDAO<T> {
+- static int idSequence
++ create(T object): T
++ getById(int id): T
++ remove(T object): T
++ update(T object): T
+}
+
+class DAO<T extends IModel<T>> {
+
++ create(IModel building): IModel
++ getById(int id): IModel
++ remove(IModel building): IModel
++ update(IModel building): IModel
 }
 ' ================================
-' Organisation
+' Organization
 '=================================
 
 
@@ -148,24 +166,7 @@ class CSVHandler {
 }
 
 
-' ===============================
-' DAO
-' ===============================
-interface IDAO<T> {
-- static int idSequence
-+ create(T object): T
-+ getById(int id): T
-+ remove(T object): T
-+ update(T object): T
-}
 
-class DAO<T extends IModel> {
-
-+ create(IModel building): IModel
-+ getById(int id): IModel
-+ remove(IModel building): IModel
-+ update(IModel building): IModel
-}
 
 
 ' ===============================
