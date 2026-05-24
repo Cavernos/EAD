@@ -21,7 +21,6 @@
                         <Font name="System Bold" size="24.0" />
                     </font>
                 </Label>
-                <Label text="Comparez vos infrastructures et estimez vos consommations et coûts futurs." textFill="#7f8c8d" />
             </children>
         </VBox>
 
