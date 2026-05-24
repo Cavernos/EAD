@@ -1,14 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0" >
+<VBox prefHeight="600.0" prefWidth="250.0" spacing="10.0" style="-fx-background-color: #008000;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.MainController">
+    <children>
+        <Label text="Smart Energy Manager" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+            <VBox.margin>
+                <Insets bottom="5.0" />
+            </VBox.margin>
+        </Label>
 
-</AnchorPane>
+        <Separator opacity="0.2" prefWidth="200.0" />
+
+        <Button fx:id="btnDashboard" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#switchView" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Tableau de bord">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+
+        <Button fx:id="btnOrganizations" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#switchView" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Organisations">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+
+        <Button fx:id="btnEnergy" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#switchView" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Consommations">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+
+        <Separator opacity="0.2" prefWidth="200.0" />
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="15.0" right="15.0" top="25.0" />
+    </padding>
+</VBox>
