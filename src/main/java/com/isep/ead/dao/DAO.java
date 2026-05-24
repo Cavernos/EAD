@@ -4,6 +4,8 @@ import com.isep.ead.models.IModel;
 import com.isep.ead.utils.CSVHandler;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class DAO<T extends IModel<T>> implements IDAO<T>{
@@ -29,23 +31,32 @@ public class DAO<T extends IModel<T>> implements IDAO<T>{
 
     @Override
     public T getById(int id) {
-        String[] rows = this.csvHandler.read();
-        for (String row : rows) {
-            if (row.contains(",")){
-                T model = Objects.requireNonNull(this.createNewModelInstance()).fromCSV(row.split(","));
-                if (model.getId() == id) {
-                    return model;
-                }
-            }
+        List<T> models = this.getAll();
+        if (id - 1 < models.size()) {
+            return models.get(id - 1);
         }
         return null;
     }
+
+    @Override
+    public List<T> getAll() {
+        String[] rows = this.csvHandler.read();
+        List<T> records = new ArrayList<>();
+        for (String row : rows) {
+            if (row.contains(",")){
+                T model = Objects.requireNonNull(this.createNewModelInstance()).fromCSV(row.split(","));
+                records.add(model);
+            }
+        }
+        return records;
+    }
+
     private int getLastId() {
         String row = this.csvHandler.getLastRow();
         if (!row.contains(",")) {
             return 1;
         }
-        return Integer.parseInt(row.split(",")[0]);
+        return Integer.parseInt(row.split(",")[0]) + 1;
     }
 
     @Override

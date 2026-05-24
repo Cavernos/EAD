@@ -4,12 +4,12 @@ package com.isep.ead.dao;
 import com.isep.ead.models.building.Building;
 import org.junit.jupiter.api.*;
 
-
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class DAOTest {

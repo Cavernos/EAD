@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml">
-  <padding>
-    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-  </padding>
-
-  <Label fx:id="welcomeText"/>
-  <Button text="Hello!"/>
-</VBox>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.OrganizationCrudController">
+   <children>
+      <Label layoutX="125.0" layoutY="45.0" prefHeight="71.0" prefWidth="353.0" text="Organization">
+         <font>
+            <Font name="Arial Black" size="48.0" />
+         </font>
+      </Label>
+      <HBox alignment="CENTER" layoutX="102.0" layoutY="313.0" prefHeight="28.0" prefWidth="396.0" spacing="30.0">
+         <children>
+            <Button fx:id="createButton" mnemonicParsing="false" onAction="#onClick" text="Créer" />
+            <Button fx:id="modifyButton" mnemonicParsing="false" onAction="#onClick" text="Modifier" />
+            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onClick" text="Supprimer" />
+         </children>
+      </HBox>
+      <HBox fx:id="organizationLayer" alignment="CENTER" layoutX="53.0" layoutY="129.0" prefHeight="142.0" prefWidth="494.0" spacing="25.0" />
+   </children>
+</Pane>

@@ -13,6 +13,9 @@ public class Organization implements IModel<Organization> {
     private String name;
     private final List<Building> buildings = new ArrayList<>();
 
+    public Organization() {
+
+    }
 
     public Organization(String name) {
         this.name = name;
