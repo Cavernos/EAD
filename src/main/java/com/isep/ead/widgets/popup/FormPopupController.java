@@ -7,7 +7,6 @@ import com.isep.ead.widgets.inputs.FormInputController;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
@@ -15,9 +14,9 @@ import java.util.Map;
 
 public class FormPopupController extends PopupController {
     private final Map<String, FormInputController> fields = new HashMap<>();
-    public Label nameLabel;
     private Runnable onSubmitAction;
-
+    @FXML
+    public Label nameLabel;
     @FXML
     private VBox contentBox;
 

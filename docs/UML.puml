@@ -42,6 +42,7 @@ class DAO<T extends IModel<T>> {
 class Organization {
     #int id
     - String name
+    - String owner
     - List<Building> buildings
     - int numberOfBuildings
     + addBuilding(b: Building): void
@@ -152,6 +153,8 @@ class Dashboard {
   + getAlerts(): List<Alert>
 }
 
+
+
 ' ══════════════════════════════
 '     IMPORT / EXPORT / TEST
 ' ══════════════════════════════
@@ -169,9 +172,14 @@ class CSVHandler {
 
 class SceneManager {
     -Stage mainStage
+    - Scene actualScene
+    -FXMLLoader lastLoader
     +SceneManager(Stage stage)
     +setMainStage(Stage mainStage)
     + Controller switchTo(String view)
+   + Scene loadScene(String view)
+   + Controller getSceneController()
+   - FXMLLoader loadPath(String views)
 }
 
 ' ===============================
@@ -207,6 +215,33 @@ class EnergyCrudController {
 }
 
 class OrganizationCrudController {
+}
+
+' POPUP
+class PopupController {
+    <<FXML>> - VBox contentBox
+    <<FXML>> # Button submitButton
+    <<FXML>> - Button cancelButton
+    <<FXML>> - onCancel()
+    <<FXML>> - onSave()
+}
+class FormPopupController {
+    - Map<String, FormInputController> fields
+    - Runnable onSubmitAction
+    <<FXML>> + Label nameLabel
+    <<FXML>> - VBox contentBox
+    + addField(String name, String labelText)
+    + setPopupName(String name)
+    + getValues(String name)
+    + setOnSubmitAction(Runnable action)
+    <<FXML>> - onFormSave()
+}
+
+class FormInputController {
+    <<FXML>> - Label inputName
+    <<FXML>> - TextField inputField
+    + String getValue()
+    + setText(String inputName)
 }
 
 ' ==============================
@@ -267,5 +302,11 @@ BuildingCrudController <-- DAO: utilise
 BuildingCrudController <-- BuildingView: met à jour
 OrganizationCrudController <-- OrganizationDAO: utilise
 OrganizationCrudController <-- OrganizationView: met à jour
+
+' Popup
+Controller <|-- PopupController
+Controller <|-- FormInputController
+PopupController <|-- FormPopupController
+FormPopupController ..> FormInputController: utilise
 @enduml
 
