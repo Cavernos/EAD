@@ -1,6 +1,8 @@
 package com.isep.ead;
 
 
+import com.isep.ead.controllers.Controller;
+import com.isep.ead.controllers.MainController;
 import com.isep.ead.utils.SceneManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -8,12 +10,11 @@ import javafx.stage.Stage;
 public class EADApplication extends Application {
     @Override
     public void start(Stage stage) {
-
         SceneManager sceneManager = new SceneManager(stage);
-        sceneManager.switchTo("organisation-view");
+        MainController controller = (MainController) sceneManager.switchTo("menu-view");
+        controller.organization();
         stage.setTitle("EAD");
         stage.show();
-
 
     }
 }

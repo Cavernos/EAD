@@ -3,6 +3,7 @@ package com.isep.ead.utils;
 import com.isep.ead.EADApplication;
 import com.isep.ead.controllers.Controller;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -24,10 +25,10 @@ public class SceneManager {
         this.mainStage = mainStage;
     }
 
-    public Scene loadScene(String view) {
+    public Parent loadScene(String view) {
         try {
             this.lastLoader = this.loadPath(view);
-            return new Scene(Objects.requireNonNull(this.lastLoader).load());
+            return Objects.requireNonNull(this.lastLoader).load();
         } catch (IOException e) {
             System.out.println("Failed to load Scene : " + view);
             throw new RuntimeException(e);
@@ -35,7 +36,7 @@ public class SceneManager {
     }
 
     public Controller switchTo(String view) {
-        Scene scene = this.loadScene(view);
+        Scene scene = new Scene(this.loadScene(view));
         this.mainStage.setScene(scene);
         this.actualScene = scene;
         this.mainStage.sizeToScene();

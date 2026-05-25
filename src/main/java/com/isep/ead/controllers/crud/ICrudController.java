@@ -1,4 +1,4 @@
-package com.isep.ead.controllers;
+package com.isep.ead.controllers.crud;
 
 import javafx.fxml.FXML;
 

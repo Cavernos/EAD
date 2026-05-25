@@ -1,17 +1,14 @@
-package com.isep.ead.controllers;
+package com.isep.ead.controllers.crud;
 
 import com.isep.ead.dao.DAO;
 import com.isep.ead.models.organization.Organization;
-import com.isep.ead.widgets.popup.FormPopupController;
+import com.isep.ead.controllers.widgets.popup.FormPopupController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class OrganizationCrudController extends CrudController {
-
-    //@FXML
-    //public HBox organizationLayer;
 
     @FXML
     protected void initialize() {
@@ -36,11 +33,9 @@ public class OrganizationCrudController extends CrudController {
 
     @Override
     public void add() {
-
         Stage stage = new Stage();
         this.sceneManager.setMainStage(stage);
         stage.setTitle("Ajout d'une organisation");
-
         FormPopupController controller = (FormPopupController) this.sceneManager.switchTo("views/popup/FormPopup");
         controller.setPopupName("Nouvelle Organisation");
         controller.addField("name", "Nom de l'organisation *");

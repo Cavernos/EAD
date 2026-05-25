@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<VBox prefWidth="420.0" spacing="20.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #bdc3c7; -fx-border-width: 1;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.widgets.popup.PopupWindow">
+<VBox prefWidth="420.0" spacing="20.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #bdc3c7; -fx-border-width: 1;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
     <children>
 
         <VBox spacing="5.0">
@@ -46,9 +46,9 @@
 
         <HBox alignment="CENTER_RIGHT" spacing="12.0">
             <children>
-                <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancel" prefHeight="35.0" prefWidth="90.0" style="-fx-background-color: #eeeeee; -fx-text-fill: #333333; -fx-background-radius: 5; -fx-cursor: hand; -fx-font-weight: bold;" text="Annuler" />
+                <Button fx:id="cancelButton" mnemonicParsing="false"  prefHeight="35.0" prefWidth="90.0" style="-fx-background-color: #eeeeee; -fx-text-fill: #333333; -fx-background-radius: 5; -fx-cursor: hand; -fx-font-weight: bold;" text="Annuler" />
 
-                <Button fx:id="submitButton" mnemonicParsing="false" onAction="#onSave" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #008000; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand; -fx-font-weight: bold;" text="Enregistrer" />
+                <Button fx:id="submitButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #008000; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand; -fx-font-weight: bold;" text="Enregistrer" />
             </children>
             <VBox.margin>
                 <Insets top="10.0" />

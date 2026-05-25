@@ -1,5 +1,7 @@
-package com.isep.ead.controllers;
+package com.isep.ead.controllers.crud;
 
+import com.isep.ead.controllers.Controller;
+import com.isep.ead.controllers.widgets.ButtonClickController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -7,7 +9,7 @@ import javafx.scene.control.Button;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CrudController extends Controller implements ICrudController {
+public class CrudController extends ButtonClickController implements ICrudController {
 
     @FXML
     private Button createButton;
@@ -17,8 +19,6 @@ public class CrudController extends Controller implements ICrudController {
 
     @FXML
     private Button deleteButton;
-
-    private final Map<Button, Runnable> buttonAction = new HashMap<>();
 
     @FXML
     protected void initialize() {
@@ -45,12 +45,5 @@ public class CrudController extends Controller implements ICrudController {
     public void delete() {
 
     }
-    @FXML
-    private void onClick(ActionEvent event) {
-        Button source = (Button) event.getSource();
-        Runnable action = this.buttonAction.get(source);
-        if(action != null) {
-            action.run();
-        }
-    }
+
 }

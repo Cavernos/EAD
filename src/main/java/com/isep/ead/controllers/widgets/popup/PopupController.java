@@ -1,4 +1,4 @@
-package com.isep.ead.widgets.popup;
+package com.isep.ead.controllers.widgets.popup;
 
 import com.isep.ead.controllers.Controller;
 import javafx.fxml.FXML;

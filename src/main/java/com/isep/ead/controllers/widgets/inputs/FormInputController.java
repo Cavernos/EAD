@@ -1,4 +1,4 @@
-package com.isep.ead.widgets.inputs;
+package com.isep.ead.controllers.widgets.inputs;
 
 import com.isep.ead.controllers.Controller;
 import javafx.fxml.FXML;
