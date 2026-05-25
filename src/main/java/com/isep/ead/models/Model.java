@@ -5,12 +5,6 @@ public class Model implements IModel {
     public String toCSV() {
         return "";
     }
-
-    @Override
-    public String fromCSV() {
-        return "";
-    }
-
     public static Model fromCSV(String csv) {
         return new Model();
     }
