@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox prefWidth="420.0" spacing="20.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #bdc3c7; -fx-border-width: 1;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.widgets.popup.FormPopupController">
+    <children>
+
+        <VBox spacing="5.0">
+            <children>
+                <Label fx:id="nameLabel">
+                    <font>
+                        <Font name="System Bold" size="20.0" />
+                    </font>
+                </Label>
+                <Label textFill="#7f8c8d">
+                    <font>
+                        <Font size="12.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+
+
+        <VBox fx:id="contentBox" style="-fx-background-color: transparent;"/>
+
+        <HBox alignment="CENTER_RIGHT" spacing="12.0">
+            <children>
+                <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancel" prefHeight="35.0" prefWidth="90.0" style="-fx-background-color: #eeeeee; -fx-text-fill: #333333; -fx-background-radius: 5; -fx-cursor: hand; -fx-font-weight: bold;" text="Annuler" />
+
+                <Button fx:id="submitButton" mnemonicParsing="false" onAction="#onFormSave" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #008000; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand; -fx-font-weight: bold;" text="Enregistrer" />
+            </children>
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
+        </HBox>
+
+    </children>
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+    </padding>
+</VBox>

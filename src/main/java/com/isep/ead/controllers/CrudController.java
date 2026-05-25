@@ -1,11 +1,8 @@
 package com.isep.ead.controllers;
 
-import com.isep.ead.models.organization.Organization;
-import com.isep.ead.widgets.FormScene;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
 
 import java.util.HashMap;
 import java.util.Map;

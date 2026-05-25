@@ -11,6 +11,7 @@ public class Organization implements IModel<Organization> {
 
     protected int id;
     private String name;
+    private String owner;
     private final List<Building> buildings = new ArrayList<>();
 
     public Organization() {
@@ -108,6 +109,10 @@ public class Organization implements IModel<Organization> {
 
     @Override
     public String toString() {
-        return "Organization{id=" + id + ", name='" + name + "', buildings=" + buildings.size() + ", totalCost=" + String.format("%.2f", getEstimatedCost()) + "EUR}";
+        return "Organization{id=" + id + ", name='" + name + ", owner='" + owner +"', buildings=" + buildings.size() + ", totalCost=" + String.format("%.2f", getEstimatedCost()) + "EUR}";
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

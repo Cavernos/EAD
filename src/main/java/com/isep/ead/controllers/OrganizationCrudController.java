@@ -2,20 +2,16 @@ package com.isep.ead.controllers;
 
 import com.isep.ead.dao.DAO;
 import com.isep.ead.models.organization.Organization;
-import com.isep.ead.widgets.FormScene;
+import com.isep.ead.widgets.popup.FormPopupController;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.Map;
-
 public class OrganizationCrudController extends CrudController {
 
-    @FXML
-    public HBox organizationLayer;
+    //@FXML
+    //public HBox organizationLayer;
 
     @FXML
     protected void initialize() {
@@ -33,24 +29,32 @@ public class OrganizationCrudController extends CrudController {
             Label idLabel = new Label("Id " + organization.getId());
             Label nameLabel = new Label("Name " + organization.getName());
             vBox.getChildren().addAll(idLabel, nameLabel);
-            this.organizationLayer.getChildren().add(vBox);
+            //this.organizationLayer.getChildren().add(vBox);
         }
 
     }
 
     @Override
     public void add() {
+
         Stage stage = new Stage();
-        Organization organization = new Organization();
-        FormScene form = new FormScene(Map.of("name", "Nom :"));
-        stage.setScene(form.create());
+        this.sceneManager.setMainStage(stage);
+        stage.setTitle("Ajout d'une organisation");
+
+        FormPopupController controller = (FormPopupController) this.sceneManager.switchTo("views/popup/FormPopup");
+        controller.setPopupName("Nouvelle Organisation");
+        controller.addField("name", "Nom de l'organisation *");
+        controller.addField("owner", "Propriétaire");
         stage.show();
-        form.getSubmitButton().setOnAction(actionEvent -> {
-            Map<String, String> values = form.getValues();
-            organization.setName(values.get("name"));
-            this.dao.create(organization);
+        controller.setOnSubmitAction(() -> {
+            Organization organization = new Organization();
+            organization.setName(controller.getValues("name"));
+            organization.setOwner(controller.getValues("owner"));
+            DAO<Organization> dao = new DAO<>(Organization.class);
+            dao.create(organization);
             stage.close();
         });
+
     }
 
     @Override

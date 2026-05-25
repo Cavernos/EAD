@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <VBox prefHeight="600.0" prefWidth="250.0" spacing="10.0" style="-fx-background-color: #008000;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.MainController">
     <children>
         <Label text="Smart Energy Manager" textFill="WHITE">
