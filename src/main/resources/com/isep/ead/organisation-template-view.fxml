@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="170.0" prefWidth="220.0" spacing="8.0"
+      style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #dcdde1; -fx-border-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 8, 0, 0, 4);"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://fxml/1">
+    <children>
+
+        <Label text="🏢" textFill="#3498db">
+            <font>
+                <Font size="36.0" />
+            </font>
+        </Label>
+
+        <Label fx:id="lblCardTitle" text="Nom Orga">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Label>
+
+        <Label fx:id="lblCardBuildings" text="0 Bâtiments" textFill="#7f8c8d">
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Label>
+
+    </children>
+</VBox>
