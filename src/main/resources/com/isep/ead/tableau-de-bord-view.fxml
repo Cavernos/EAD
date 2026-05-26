@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox prefHeight="850.0" prefWidth="1150.0" spacing="20.0" style="-fx-background-color: #f4f7f6;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" >
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+    </padding>
+    <children>
+
+        <VBox spacing="5.0">
+            <children>
+                <Label text="Tableau de Bord">
+                    <font>
+                        <Font name="System Bold" size="26.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+
+        <HBox spacing="15.0">
+            <children>
+                <VBox prefWidth="180.0" style="-fx-background-color: #008000; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 10, 0, 0, 4);" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 11;" text="Consommation Du Jour" textFill="WHITE" />
+                        <Label fx:id="lblConsToday" style="-fx-font-weight: bold; -fx-font-size: 24;" text="450 kWh" textFill="WHITE" />
+                    </children>
+                </VBox>
+
+                <VBox prefWidth="180.0" style="-fx-background-color: #008000; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 10, 0, 0, 4);" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 11;" text="Consommation Du Mois" textFill="WHITE" />
+                        <Label fx:id="lblConsMonth" style="-fx-font-weight: bold; -fx-font-size: 24;" text="12 840 kWh" textFill="WHITE" />
+                    </children>
+                </VBox>
+
+                <VBox prefWidth="180.0" style="-fx-background-color: #008000; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 10, 0, 0, 4);" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 11;" text="Consommation Annuelle" textFill="WHITE" />
+                        <Label fx:id="lblConsYear" style="-fx-font-weight: bold; -fx-font-size: 24;" text="145 200 kWh" textFill="WHITE" />
+                    </children>
+                </VBox>
+
+                <VBox prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 10, 0, 0, 4);" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 11;" text="Coût Estimé (mensuelle)" />
+                        <Label fx:id="lblEstimatedCost" style="-fx-font-weight: bold; -fx-font-size: 24;" text="2 568 €" />
+                    </children>
+                </VBox>
+
+                <VBox prefWidth="220.0" style="-fx-background-color: #f5c6cb; -fx-background-radius: 10; -fx-padding: 15; -fx-border-color: #f5c6cb; -fx-border-radius: 10;" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 11;" text="Bâtiment le plus consommateur" textFill="#c0392b" />
+                        <Label fx:id="lblWorstBuilding" style="-fx-font-weight: bold; -fx-font-size: 20;" text="Bâtiment C" textFill="#c0392b" />
+                        <Label fx:id="lblWorstBuildingCons" style="-fx-font-size: 11;" text="4 120 kWh consommés" textFill="#7f8c8d" />
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+
+        <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 10, 0, 0, 4);" VBox.vgrow="ALWAYS">
+            <children>
+                <Label style="-fx-font-weight: bold; -fx-font-size: 14;" text="Évolution de la Consommation Globale" />
+                <AreaChart fx:id="trendAreaChart" legendVisible="false" VBox.vgrow="ALWAYS">
+                    <xAxis>
+                        <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="kWh" side="LEFT" />
+                    </yAxis>
+                </AreaChart>
+            </children>
+        </VBox>
+
+        <HBox prefHeight="220.0" spacing="20.0">
+            <children>
+
+                <VBox style="-fx-background-color: #1a8ae5; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 10, 0, 0, 4);" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 14;" text="Indicateurs de Performance" textFill="WHITE" />
+
+                        <VBox spacing="12.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <VBox spacing="4.0">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT">
+                                            <children>
+                                                <Label style="-fx-font-size: 12;" text="Réduction Empreinte Carbone" textFill="WHITE" />
+                                                <HBox HBox.hgrow="ALWAYS" />
+                                                <Label style="-fx-font-weight: bold;" text="75%" textFill="#29ff82" />
+                                            </children>
+                                        </HBox>
+                              <ProgressBar prefHeight="18.0" prefWidth="600.0" progress="0.0" />
+                                    </children>
+                                </VBox>
+
+                                <VBox spacing="4.0">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT">
+                                            <children>
+                                                <Label style="-fx-font-size: 12;" text="Efficacité Énergétique Globale" textFill="WHITE" />
+                                                <HBox HBox.hgrow="ALWAYS" />
+                                                <Label style="-fx-font-weight: bold;" text="40%" textFill="#ffa657" />
+                                            </children>
+                                        </HBox>
+                              <ProgressBar prefHeight="18.0" prefWidth="600.0" progress="0.0" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <VBox prefWidth="450.0" style="-fx-background-color: #c0392b; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 10, 0, 0, 4);">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 14;" text="Alertes" textFill="WHITE" />
+
+                        <ListView fx:id="listViewAlerts" style="-fx-background-color: #fafafa; -fx-border-color: #ddd; -fx-border-radius: 5;" VBox.vgrow="ALWAYS" />
+
+                    </children>
+                </VBox>
+
+            </children>
+        </HBox>
+
+    </children>
+</VBox>
