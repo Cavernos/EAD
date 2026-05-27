@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox prefWidth="500.0" spacing="15.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #dcdde1; -fx-border-width: 1; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.AddBuildingController">
+    <children>
+
+        <VBox spacing="5.0">
+            <children>
+                <Label text="Ajouter un nouveau Bâtiment">
+                    <font>
+                        <Font name="System Bold" size="20.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+
+        <VBox spacing="5.0">
+            <children>
+                <Label text="Nom du bâtiment *">
+                    <font>
+                        <Font name="System Bold" size="13.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="txtName" prefHeight="35.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #dcdde1; -fx-border-radius: 5;" />
+            </children>
+        </VBox>
+
+        <VBox spacing="5.0">
+            <children>
+                <Label text="Adresse *">
+                    <font>
+                        <Font name="System Bold" size="13.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="txtAddress" prefHeight="35.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #dcdde1; -fx-border-radius: 5;" />
+            </children>
+        </VBox>
+
+        <HBox spacing="20.0">
+            <children>
+                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label text="Surface (m²) *">
+                            <font>
+                                <Font name="System Bold" size="13.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="txtSurface" prefHeight="35.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #dcdde1; -fx-border-radius: 5;" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label text="Type de bâtiment *">
+                            <font>
+                                <Font name="System Bold" size="13.0" />
+                            </font>
+                        </Label>
+                        <ComboBox fx:id="comboType" maxWidth="1.7976931348623157E308" prefHeight="35.0" promptText="Choisir" style="-fx-background-color: #f8f9fa; -fx-border-color: #dcdde1; -fx-border-radius: 5;">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="House" />
+                                    <String fx:value="Apartment" />
+                                    <String fx:value="Office" />
+                                    <String fx:value="Shop" />
+                                    <String fx:value="University" />
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+
+        <VBox spacing="8.0" style="-fx-border-color: #eee; -fx-border-width: 1 0 0 0; -fx-padding: 10 0 0 0;">
+            <children>
+                <Label text="Sources d'énergie :">
+                    <font>
+                        <Font name="System Bold" size="13.0" />
+                    </font>
+                </Label>
+                <HBox spacing="25.0">
+                    <children>
+                        <CheckBox fx:id="chkElectricity" mnemonicParsing="false" text="Électricité" textFill="#00070d" />
+                        <CheckBox fx:id="chkGas" mnemonicParsing="false" text="Gaz" />
+                        <CheckBox fx:id="chkWater" mnemonicParsing="false" text="Eau" />
+                    </children>
+                    <padding>
+                        <Insets left="5.0" />
+                    </padding>
+                </HBox>
+            </children>
+        </VBox>
+
+        <VBox spacing="5.0" style="-fx-border-color: #eee; -fx-border-width: 1 0 0 0; -fx-padding: 10 0 0 0;">
+            <children>
+                <Label text="Historique des consommations ( .csv)">
+                    <font>
+                        <Font name="System Bold" size="13.0" />
+                    </font>
+                </Label>
+                <HBox spacing="10.0">
+                    <children>
+                        <TextField fx:id="txtCsvPath" editable="false" prefHeight="35.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #dcdde1; -fx-border-radius: 5;" HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#handleBrowseCsv" prefHeight="35.0" style="-fx-background-color: #008000; -fx-text-fill: white; -fx-cursor: hand;" text="Parcourir" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+
+        <HBox alignment="CENTER_RIGHT" spacing="12.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#handleCancel" prefHeight="35.0" prefWidth="90.0" style="-fx-background-color: #eeeeee; -fx-text-fill: #333333; -fx-background-radius: 5; -fx-font-weight: bold; -fx-cursor: hand;" text="Annuler" />
+                <Button mnemonicParsing="false" onAction="#handleSave" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #008000; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-weight: bold; -fx-cursor: hand;" text="Enregistrer" />
+            </children>
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
+        </HBox>
+
+    </children>
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+    </padding>
+</VBox>
