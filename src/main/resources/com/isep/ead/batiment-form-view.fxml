@@ -80,7 +80,7 @@
 
         <VBox spacing="8.0" style="-fx-border-color: #eee; -fx-border-width: 1 0 0 0; -fx-padding: 10 0 0 0;">
             <children>
-                <Label text="Sources d'énergie actives :">
+                <Label text="Sources d'énergie :">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>

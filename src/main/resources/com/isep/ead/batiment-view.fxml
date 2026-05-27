@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.OrganizationCrudController">
+<VBox prefHeight="612.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.OrganizationCrudController">
     <children>
 
         <Label text="nom orga">
@@ -23,9 +23,9 @@
         </yAxis>
       </StackedBarChart>
 
-        <HBox spacing="15.0">
+        <HBox prefHeight="51.0" prefWidth="740.0" spacing="15.0">
             <children>
-                <Button fx:id="btnCreate" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#handleCreateOrganization" prefHeight="46.0" prefWidth="46.0" style="-fx-background-color: #008000; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 30; -fx-cursor: hand;" text="+" textAlignment="CENTER" wrapText="true">
+                <Button fx:id="btnCreate" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#handleCreateOrganization" prefHeight="49.0" prefWidth="47.0" style="-fx-background-color: #008000; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 30; -fx-cursor: hand;" text="+" textAlignment="CENTER" wrapText="true">
                     <font>
                         <Font name="Arial Bold" size="24.0" />
                     </font>

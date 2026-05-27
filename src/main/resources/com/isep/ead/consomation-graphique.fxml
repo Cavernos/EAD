@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<HBox prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #f4f7f6;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.ConsomationController">
+    <children>
+
+        <VBox spacing="20.0" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets bottom="25.0" left="25.0" right="20.0" top="25.0" />
+            </padding>
+            <children>
+
+                <VBox spacing="5.0">
+                    <children>
+                        <Label text="Analyse Graphique des Consommations" textFill="#2c3e50">
+                            <font>
+                                <Font name="System Bold" size="26.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+
+                <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 4);" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Label fx:id="lblGraphTitle" style="-fx-font-weight: bold; -fx-font-size: 15px;" text="Visualisation des données " textFill="#34495e" />
+
+                        <BarChart VBox.vgrow="ALWAYS">
+                            <xAxis>
+                                <CategoryAxis label="Période temporelle" side="BOTTOM" fx:id="xAxisTime" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="yAxisValues" label="Valeur" side="LEFT" />
+                            </yAxis>
+                        </BarChart>
+                    </children>
+                </VBox>
+
+            </children>
+        </VBox>
+
+        <VBox prefWidth="300.0" spacing="20.0" style="-fx-background-color: #008000; -fx-padding: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), -5, 0, 0, 0);">
+            <children>
+
+                <VBox spacing="5.0">
+                    <children>
+                        <Label text="Filtres d'analyse" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+
+                <Separator />
+
+                <VBox spacing="8.0">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 11px;" text="Bâtiments" textFill="WHITE" />
+                        <ComboBox fx:id="comboOrganization" maxWidth="1.7976931348623157E308" prefHeight="35.0" promptText="Choisir une Organisation" style="-fx-background-color: #f8f9fa; -fx-border-color: #e2e8f0; -fx-border-radius: 5;" />
+                        <ComboBox fx:id="comboBuilding" maxWidth="1.7976931348623157E308" prefHeight="35.0" promptText="Tous les bâtiments" style="-fx-background-color: #f8f9fa; -fx-border-color: #e2e8f0; -fx-border-radius: 5;" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="8.0">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 11px;" text="SOURCE D'ÉNERGIE" textFill="WHITE" />
+                        <ComboBox fx:id="comboEnergyType" maxWidth="1.7976931348623157E308" prefHeight="35.0" promptText="Toutes les énergies" style="-fx-background-color: #f8f9fa; -fx-border-color: #e2e8f0; -fx-border-radius: 5;" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="8.0">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 11px;" text="PÉRIODE" textFill="WHITE" />
+                        <ComboBox fx:id="comboPeriod" maxWidth="1.7976931348623157E308" prefHeight="35.0" promptText="Sélectionner la période" style="-fx-background-color: #f8f9fa; -fx-border-color: #e2e8f0; -fx-border-radius: 5;" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="10.0">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 11px;" text="UNITÉ DE L'AXE (Y)" textFill="WHITE" />
+
+                        <RadioButton fx:id="radioUnitMetric" mnemonicParsing="false" text="Consommation (kWh / m³)" textFill="WHITE">
+                            <toggleGroup>
+                                <ToggleGroup fx:id="unitToggleGroup" />
+                            </toggleGroup>
+                            <font>
+                                <Font size="13.0" />
+                            </font>
+                        </RadioButton>
+
+                        <RadioButton fx:id="radioUnitCost" mnemonicParsing="false" text="Coût estimé (€)" textFill="WHITE" toggleGroup="$unitToggleGroup">
+                            <font>
+                                <Font size="13.0" />
+                            </font>
+                        </RadioButton>
+                    </children>
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </VBox>
+
+                <Button fx:id="btnApplyFilters" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="40.0" style="-fx-background-color: #1a8ae5; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand; -fx-font-size: 14px;" text="🔄 Générer l'analyse" />
+
+            </children>
+        </VBox>
+
+    </children>
+</HBox>
