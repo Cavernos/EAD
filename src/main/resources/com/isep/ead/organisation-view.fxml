@@ -19,7 +19,7 @@
 
         <HBox spacing="15.0">
             <children>
-                <Button fx:id="createButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onClick" prefHeight="46.0" prefWidth="46.0" style="-fx-background-color: #008000; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 30; -fx-cursor: hand;" text="+" textAlignment="CENTER" wrapText="true">
+                <Button fx:id="createButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onClick" prefHeight="46.0" prefWidth="46.0" style="-fx-background-color: #008000; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 30; -fx-cursor: hand;-fx-background-insets: 0" text="+" textAlignment="CENTER" wrapText="true">
                <font>
                   <Font name="Arial Bold" size="24.0" />
                </font>

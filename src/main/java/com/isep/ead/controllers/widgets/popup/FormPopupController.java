@@ -1,10 +1,9 @@
 package com.isep.ead.controllers.widgets.popup;
 
 
-
 import com.isep.ead.controllers.widgets.inputs.FormInputController;
+import com.isep.ead.utils.LoadedView;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
@@ -19,12 +18,17 @@ public class FormPopupController extends PopupController {
     @FXML
     private VBox contentBox;
 
-    public void addField(String name, String labelText) {
-        Parent field = this.sceneManager.loadScene("components/input/FormInput");
-        FormInputController inputController = (FormInputController) this.sceneManager.getSceneController();
+    public void addField(String name, String labelText, String defaultValue) {
+        LoadedView field = this.sceneManager.loadTemplate("components/input/FormInput");
+        FormInputController inputController = (FormInputController) field.getController();
         inputController.setText(labelText);
-        this.contentBox.getChildren().add(field);
+        inputController.setDefaultValue(defaultValue);
+        this.contentBox.getChildren().add(field.getRoot());
         this.fields.put(name, inputController);
+    }
+
+    public void addField(String name, String labelText) {
+        this.addField(name, labelText, "");
     }
 
     public void setPopupName(String name) {

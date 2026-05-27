@@ -2,10 +2,9 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
-<?import javafx.scene.layout.BorderPane?>
 <BorderPane prefHeight="600.0" prefWidth="1150.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.MainController">
     <left>
         <VBox prefHeight="600.0" prefWidth="250.0" spacing="10.0" style="-fx-background-color: #008000;">
@@ -47,7 +46,9 @@
         </VBox>
     </left>
     <center>
-        <VBox fx:id="contentDash" />
+        <ScrollPane>
+            <VBox fx:id="contentDash" />
+        </ScrollPane>
     </center>
 </BorderPane>
 

@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<VBox alignment="CENTER" prefHeight="170.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #dcdde1; -fx-border-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 8, 0, 0, 4);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<VBox alignment="CENTER" prefHeight="170.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #dcdde1; -fx-border-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 8, 0, 0, 4);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.templates.OrganizationItemController">
     <children>
-      <HBox alignment="TOP_RIGHT" prefHeight="27.0" prefWidth="218.0">
-         <children>
-            <Button alignment="TOP_LEFT" mnemonicParsing="false" prefHeight="25.0" prefWidth="22.0" style="-fx-background-color: white;" text="⁝" textAlignment="RIGHT" />
-         </children>
-      </HBox>
-
         <Label text="🏢" textFill="#3498db">
             <font>
                 <Font size="36.0" />
@@ -24,11 +18,16 @@
             </font>
         </Label>
 
-        <Label fx:id="lblCardBuildings" text="0 Bâtiments" textFill="#7f8c8d">
+        <Label fx:id="lblCardBuildings" text="bâtiments" textFill="#7f8c8d">
             <font>
                 <Font size="13.0" />
             </font>
         </Label>
-
+        <HBox alignment="CENTER" prefHeight="27.0" prefWidth="218.0">
+            <children>
+                <Button fx:id="modifyButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: white;-fx-cursor: hand;" text="Modifier" onAction="#onModify"/>
+                <Button fx:id="deleteButton" alignment="CENTER_RIGHT" mnemonicParsing="false" style="-fx-background-color: white;-fx-cursor: hand;" text="Supprimer" textFill="#c0392b" onAction="#onDelete" />
+            </children>
+        </HBox>
     </children>
 </VBox>

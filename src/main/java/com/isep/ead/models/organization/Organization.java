@@ -81,7 +81,7 @@ public class Organization implements IModel<Organization> {
 
     @Override
     public String toCSV() {
-        return id + "," + name;
+        return id + "," + name + "," + owner;
     }
 
     @Override
@@ -106,6 +106,7 @@ public class Organization implements IModel<Organization> {
     public void setName(String name) {
         this.name = name;
     }
+
 
     @Override
     public String toString() {

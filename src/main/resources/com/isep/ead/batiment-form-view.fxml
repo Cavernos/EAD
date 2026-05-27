@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.collections.*?>
-<?import javafx.geometry.*?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
+<?import java.lang.*?>
 <VBox prefWidth="500.0" spacing="15.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #dcdde1; -fx-border-width: 1; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.AddBuildingController">
     <children>
 

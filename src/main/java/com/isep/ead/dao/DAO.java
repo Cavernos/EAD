@@ -32,8 +32,10 @@ public class DAO<T extends IModel<T>> implements IDAO<T>{
     @Override
     public T getById(int id) {
         List<T> models = this.getAll();
-        if (id - 1 < models.size()) {
-            return models.get(id - 1);
+        for (T model : models) {
+            if (model.getId() == id) {
+                return model;
+            }
         }
         return null;
     }

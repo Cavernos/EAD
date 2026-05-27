@@ -1,10 +1,10 @@
 package com.isep.ead.controllers;
 
+import com.isep.ead.controllers.crud.OrganizationCrudController;
 import com.isep.ead.controllers.widgets.ButtonClickController;
-import javafx.event.ActionEvent;
+import com.isep.ead.utils.LoadedView;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
@@ -30,27 +30,26 @@ public class MainController extends ButtonClickController {
     }
 
     public void organization() {
-        this.switchView("organisation-view");
+        ((OrganizationCrudController)this.switchView("organisation-view")).index();
     }
 
     public void dashboard() {
-
+        this.switchView("tableau-de-bord-view");
     }
 
     public void energy() {
-        this.switchView("organisation-form-view");
+
 
     }
 
-    public void switchView(String view) {
-        Parent scene = this.sceneManager.loadScene(view);
-        if(!scene.equals(this.currentScene)) {
+    public Controller switchView(String view) {
+        LoadedView scene = this.sceneManager.loadPage(view);
+        if(!scene.getRoot().equals(this.currentScene)) {
             this.contentDash.getChildren().clear();
-            this.currentScene = scene;
+            this.currentScene = scene.getRoot();
             this.contentDash.getChildren().add(this.currentScene);
-            this.sceneManager.getSceneController();
-
         }
+        return scene.getController();
 
     }
 }

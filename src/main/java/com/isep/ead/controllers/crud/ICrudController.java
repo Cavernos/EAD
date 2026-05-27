@@ -7,7 +7,7 @@ public interface ICrudController {
     @FXML
     void add();
     @FXML
-    void modify();
+    void modify(int id);
     @FXML
-    void delete();
+    void delete(int id);
 }

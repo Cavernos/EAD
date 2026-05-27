@@ -19,4 +19,8 @@ public class FormInputController extends Controller {
     public void setText(String inputName) {
         this.inputName.setText(inputName);
     }
+
+    public void setDefaultValue(String value) {
+        this.inputField.setText(value);
+    }
 }

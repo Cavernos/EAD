@@ -9,13 +9,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class SceneManager {
 
     private Stage mainStage;
-    private Scene actualScene;
-    private FXMLLoader lastLoader;
+    private final Map<String, LoadedView> viewCache = new HashMap<>();
 
     public SceneManager(Stage stage){
         this.setMainStage(stage);
@@ -25,34 +26,44 @@ public class SceneManager {
         this.mainStage = mainStage;
     }
 
-    public Parent loadScene(String view) {
+    public LoadedView loadPage(String view) {
+        if (this.viewCache.containsKey(view)) {
+            return this.viewCache.get(view);
+        }
+
+        LoadedView root = this.loadTemplate(view);
+
+        this.viewCache.put(view, root);
+        return root;
+    }
+
+
+    public LoadedView loadTemplate(String view) {
         try {
-            this.lastLoader = this.loadPath(view);
-            return Objects.requireNonNull(this.lastLoader).load();
-        } catch (IOException e) {
-            System.out.println("Failed to load Scene : " + view);
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Controller switchTo(String view) {
-        Scene scene = new Scene(this.loadScene(view));
-        this.mainStage.setScene(scene);
-        this.actualScene = scene;
-        this.mainStage.sizeToScene();
-        return this.getSceneController();
-
-    }
-
-    public Controller getSceneController() {
-        if (this.lastLoader != null) {
-            Controller controller = this.lastLoader.getController();
-            if (controller != null)
+            FXMLLoader loader = this.loadPath(view);
+            Parent root = Objects.requireNonNull(loader).load();
+            Controller controller = loader.getController();
+            if (controller != null) {
                 controller.setSceneManager(this);
-            return controller;
+            }
+
+            return new LoadedView(root, controller);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load template: " + view, e);
         }
-        return null;
     }
+
+
+
+    public Controller switchTo(LoadedView view) {
+        Scene scene = new Scene(view.getRoot());
+        this.mainStage.setScene(scene);
+        this.mainStage.sizeToScene();
+        return view.getController();
+
+    }
+
 
     private FXMLLoader loadPath(String view) {
         URL viewPath = EADApplication.class.getResource(view + ".fxml");
