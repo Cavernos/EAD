@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.BarChart?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.*?>
+
 <HBox prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #f4f7f6;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.ConsomationController">
     <children>
 
@@ -18,7 +17,7 @@
 
                 <VBox spacing="5.0">
                     <children>
-                        <Label text="Analyse Graphique des Consommations" textFill="#2c3e50">
+                        <Label text="Analyse Graphique des Consommations">
                             <font>
                                 <Font name="System Bold" size="26.0" />
                             </font>
@@ -28,7 +27,7 @@
 
                 <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 4);" VBox.vgrow="ALWAYS">
                     <children>
-                        <Label fx:id="lblGraphTitle" style="-fx-font-weight: bold; -fx-font-size: 15px;" text="Visualisation des données " textFill="#34495e" />
+                        <Label fx:id="lblGraphTitle" style="-fx-font-weight: bold; -fx-font-size: 15px;" text="Visualisation des données " />
 
                         <BarChart VBox.vgrow="ALWAYS">
                             <xAxis>
