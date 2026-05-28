@@ -46,29 +46,30 @@ public class ConsomationController extends Controller {
     @FXML
     public void initialize() {
         try {
-            List<Organization> orgs = orgDao.getAll();
-            List<String> orgNames = orgs.stream().map(Organization::getName).collect(Collectors.toList());
-            orgNames.add(0, "Toutes");
-
-            if (comboOrganization != null) {
-                comboOrganization.setItems(FXCollections.observableArrayList(orgNames));
-                comboOrganization.setValue("Toutes");
-                comboOrganization.valueProperty().addListener((obs, oldVal, newVal) -> refreshBuildingCombo(newVal));
-            }
-            if (comboBuilding != null) {
-                comboBuilding.setItems(FXCollections.observableArrayList("Tous"));
-                comboBuilding.setValue("Tous");
-            }
             if (comboEnergyType != null)   comboEnergyType.setItems(FXCollections.observableArrayList("Tous","Electricity","Gas","Water","Climatisation"));
             if (comboPeriod != null)       comboPeriod.setItems(FXCollections.observableArrayList("Ce mois","3 derniers mois","6 derniers mois","Cette année"));
             if (btnApplyFilters != null)   btnApplyFilters.setOnAction(e -> applyFilters());
-
-            List<Energy> all = getAllEnergy();
-            if (colDate != null) { initTableColumns(); loadHistorique(all); }
-            if (barChart != null) loadBarChart(all);
+            if (colDate != null)           initTableColumns();
+            refreshCombos();
         } catch (Exception e) {
             System.err.println("ConsomationController init: " + e.getMessage());
         }
+    }
+
+    public void refreshCombos() {
+        List<String> orgNames = orgDao.getAll().stream().map(Organization::getName).collect(Collectors.toList());
+        orgNames.add(0, "Toutes");
+        if (comboOrganization != null) {
+            String prev = comboOrganization.getValue();
+            comboOrganization.valueProperty().removeListener((obs, o, n) -> {});
+            comboOrganization.setItems(FXCollections.observableArrayList(orgNames));
+            comboOrganization.setValue(orgNames.contains(prev) ? prev : "Toutes");
+            comboOrganization.valueProperty().addListener((obs, oldVal, newVal) -> refreshBuildingCombo(newVal));
+        }
+        refreshBuildingCombo(comboOrganization != null ? comboOrganization.getValue() : "Toutes");
+        List<Energy> all = getAllEnergy();
+        if (colDate != null) loadHistorique(all);
+        if (barChart != null) loadBarChart(all);
     }
 
     private void refreshBuildingCombo(String orgName) {

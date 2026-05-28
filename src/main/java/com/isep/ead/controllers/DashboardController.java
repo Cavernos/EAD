@@ -10,6 +10,7 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -26,6 +27,10 @@ public class DashboardController extends Controller {
     @FXML private Label lblWorstBuildingCons;
     @FXML private AreaChart<String, Number> trendAreaChart;
     @FXML private ListView<String> listViewAlerts;
+    @FXML private ProgressBar progressCarbon;
+    @FXML private ProgressBar progressEfficiency;
+    @FXML private Label lblCarbonPct;
+    @FXML private Label lblEfficiencyPct;
 
     @FXML
     public void initialize() {
@@ -133,5 +138,52 @@ public class DashboardController extends Controller {
         });
         listViewAlerts.setItems(FXCollections.observableArrayList(
             msgs.isEmpty() ? List.of("✅ Aucune alerte active") : msgs));
+
+        // Indicateurs de performance
+        // 1. Réduction Empreinte Carbone : comparaison conso mois courant vs même mois an dernier
+        double consThisMonth = energy.stream()
+            .filter(r -> r.getDate().getYear() == now.getYear() && r.getDate().getMonth() == now.getMonth())
+            .mapToDouble(Energy::getQuantity).sum();
+        double consLastYearSameMonth = energy.stream()
+            .filter(r -> r.getDate().getYear() == now.getYear() - 1 && r.getDate().getMonth() == now.getMonth())
+            .mapToDouble(Energy::getQuantity).sum();
+        double carbonRatio;
+        if (consLastYearSameMonth > 0) {
+            // réduction positive = on consomme moins qu'avant
+            carbonRatio = Math.max(0, Math.min(1, 1.0 - (consThisMonth / consLastYearSameMonth)));
+        } else if (consThisMonth == 0) {
+            carbonRatio = 0;
+        } else {
+            // Pas de référence N-1 : on base sur une cible arbitraire (500 kWh/mois)
+            carbonRatio = Math.max(0, Math.min(1, 1.0 - (consThisMonth / 500.0)));
+        }
+        if (progressCarbon != null) progressCarbon.setProgress(carbonRatio);
+        if (lblCarbonPct != null) {
+            if (consLastYearSameMonth > 0) {
+                lblCarbonPct.setText(String.format("%.0f%%", carbonRatio * 100));
+            } else {
+                lblCarbonPct.setText("Pas de référence N-1");
+            }
+        }
+
+        // 2. Efficacité Énergétique : % de bâtiments sous la consommation moyenne
+        double efficiencyRatio;
+        if (!buildings.isEmpty()) {
+            double avgCons = buildings.stream()
+                .mapToDouble(b -> energy.stream().filter(r -> r.getBuildingId() == b.getId())
+                    .mapToDouble(Energy::getQuantity).sum())
+                .average().orElse(0);
+            long efficient = buildings.stream()
+                .filter(b -> {
+                    double c = energy.stream().filter(r -> r.getBuildingId() == b.getId())
+                        .mapToDouble(Energy::getQuantity).sum();
+                    return c > 0 && c <= avgCons;
+                }).count();
+            efficiencyRatio = avgCons > 0 ? (double) efficient / buildings.size() : 0;
+        } else {
+            efficiencyRatio = 0;
+        }
+        if (progressEfficiency != null) progressEfficiency.setProgress(efficiencyRatio);
+        if (lblEfficiencyPct != null) lblEfficiencyPct.setText(String.format("%.0f%%", efficiencyRatio * 100));
     }
 }

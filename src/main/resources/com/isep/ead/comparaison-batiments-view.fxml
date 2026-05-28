@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<HBox prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #f4f7f6;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.ComparaisonController">
+    <children>
+
+        <VBox spacing="20.0" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets bottom="25.0" left="25.0" right="20.0" top="25.0" />
+            </padding>
+            <children>
+
+                <Label text="Comparaison Multi-Bâtiments" textFill="#2c3e50">
+                    <font><Font name="System Bold" size="26.0" /></font>
+                </Label>
+
+                <!-- KPI cards -->
+                <HBox spacing="15.0">
+                    <children>
+                        <VBox alignment="CENTER_LEFT" prefWidth="280.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 4);">
+                            <children>
+                                <Label text="Bâtiment le plus consommateur" style="-fx-font-size: 11px; -fx-text-fill: #7f8c8d;" />
+                                <Label fx:id="lblWorst" text="—" style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #e74c3c;" />
+                            </children>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" prefWidth="220.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 4);">
+                            <children>
+                                <Label text="Type d'énergie dominant" style="-fx-font-size: 11px; -fx-text-fill: #7f8c8d;" />
+                                <Label fx:id="lblDominant" text="—" style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #1a8ae5;" />
+                            </children>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" prefWidth="220.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 4);">
+                            <children>
+                                <Label text="Pic de consommation" style="-fx-font-size: 11px; -fx-text-fill: #7f8c8d;" />
+                                <Label fx:id="lblPeak" text="—" style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #e67e22;" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+
+                <!-- Chart -->
+                <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 4);" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Label fx:id="lblChartTitle" text="Comparaison par période" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #34495e;" />
+                        <BarChart fx:id="compareBarChart" VBox.vgrow="ALWAYS">
+                            <xAxis><CategoryAxis side="BOTTOM" /></xAxis>
+                            <yAxis><NumberAxis side="LEFT" label="Valeur" /></yAxis>
+                        </BarChart>
+                    </children>
+                </VBox>
+
+            </children>
+        </VBox>
+
+        <!-- Right panel filters -->
+        <VBox prefWidth="270.0" spacing="18.0" style="-fx-background-color: #008000; -fx-padding: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), -5, 0, 0, 0);">
+            <children>
+
+                <Label text="Filtres" textFill="WHITE">
+                    <font><Font name="System Bold" size="18.0" /></font>
+                </Label>
+                <Separator />
+
+                <VBox spacing="8.0">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 11px;" text="ORGANISATION" textFill="WHITE" />
+                        <ComboBox fx:id="comboOrganization" maxWidth="1.7976931348623157E308" prefHeight="35.0" promptText="Toutes les organisations" style="-fx-background-color: #f8f9fa; -fx-border-color: #e2e8f0; -fx-border-radius: 5;" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="8.0">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 11px;" text="PÉRIODE" textFill="WHITE" />
+                        <ComboBox fx:id="comboPeriod" maxWidth="1.7976931348623157E308" prefHeight="35.0" promptText="Sélectionner la période" style="-fx-background-color: #f8f9fa; -fx-border-color: #e2e8f0; -fx-border-radius: 5;" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="8.0">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 11px;" text="MODE D'AFFICHAGE" textFill="WHITE" />
+                        <RadioButton fx:id="radioModeTemporel" mnemonicParsing="false" text="Par période (mois)" textFill="WHITE" selected="true">
+                            <toggleGroup><ToggleGroup fx:id="modeGroup" /></toggleGroup>
+                            <font><Font size="13.0" /></font>
+                        </RadioButton>
+                        <RadioButton fx:id="radioModeType" mnemonicParsing="false" text="Par type d'énergie" textFill="WHITE" toggleGroup="$modeGroup">
+                            <font><Font size="13.0" /></font>
+                        </RadioButton>
+                    </children>
+                </VBox>
+
+                <VBox spacing="8.0">
+                    <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 11px;" text="UNITÉ (AXE Y)" textFill="WHITE" />
+                        <RadioButton fx:id="radioUnitMetric" mnemonicParsing="false" text="Consommation (kWh / m³)" textFill="WHITE" selected="true">
+                            <toggleGroup><ToggleGroup fx:id="unitGroup" /></toggleGroup>
+                            <font><Font size="13.0" /></font>
+                        </RadioButton>
+                        <RadioButton fx:id="radioUnitCost" mnemonicParsing="false" text="Coût estimé (€)" textFill="WHITE" toggleGroup="$unitGroup">
+                            <font><Font size="13.0" /></font>
+                        </RadioButton>
+                    </children>
+                </VBox>
+
+                <Button fx:id="btnGenerate" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="40.0" style="-fx-background-color: #1a8ae5; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand; -fx-font-size: 14px;" text="🔄 Comparer" />
+
+            </children>
+        </VBox>
+
+    </children>
+</HBox>

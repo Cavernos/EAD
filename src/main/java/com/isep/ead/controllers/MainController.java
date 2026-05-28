@@ -20,6 +20,8 @@ public class MainController extends ButtonClickController {
     private Button dashboardButton;
     @FXML
     private Button historiqueButton;
+    @FXML
+    private Button comparaisonButton;
 
     private Parent currentScene;
 
@@ -30,6 +32,7 @@ public class MainController extends ButtonClickController {
         this.buttonAction.put(this.energyButton, this::energy);
         this.buttonAction.put(this.dashboardButton, this::dashboard);
         this.buttonAction.put(this.historiqueButton, this::historique);
+        this.buttonAction.put(this.comparaisonButton, this::comparaison);
     }
 
     public void organization() {
@@ -42,21 +45,31 @@ public class MainController extends ButtonClickController {
     }
 
     public void energy() {
-        this.switchView("consomation-graphique");
+        var lv = this.switchViewRaw("consomation-graphique");
+        if (lv.getController() instanceof ConsomationController c) c.refreshCombos();
     }
 
     public void historique() {
-        this.switchView("historique-consomation-view");
+        var lv = this.switchViewRaw("historique-consomation-view");
+        if (lv.getController() instanceof ConsomationController c) c.refreshCombos();
+    }
+
+    public void comparaison() {
+        var lv = this.switchViewRaw("comparaison-batiments-view");
+        if (lv.getController() instanceof ComparaisonController c) c.refreshCombos();
     }
 
     public Controller switchView(String view) {
+        return switchViewRaw(view).getController();
+    }
+
+    public LoadedView switchViewRaw(String view) {
         LoadedView scene = this.sceneManager.loadPage(view);
-        if(!scene.getRoot().equals(this.currentScene)) {
+        if (!scene.getRoot().equals(this.currentScene)) {
             this.contentDash.getChildren().clear();
             this.currentScene = scene.getRoot();
             this.contentDash.getChildren().add(this.currentScene);
         }
-        return scene.getController();
-
+        return scene;
     }
 }

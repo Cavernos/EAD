@@ -25,6 +25,7 @@
                     </font>
                 </Button>
                 <Button mnemonicParsing="false" onAction="#onGenerateTestData" prefHeight="40.0" style="-fx-background-color: #1a8ae5; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-size: 12px;" text="🔧 Générer données test" />
+                <Button mnemonicParsing="false" onAction="#onExportOrganizationCsv" prefHeight="40.0" style="-fx-background-color: #8e44ad; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-size: 12px;" text="💾 Exporter CSV" />
             </children>
         </HBox>
 

@@ -44,6 +44,12 @@
                     </font>
                 </Button>
 
+                <Button fx:id="comparaisonButton" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onClick" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="Comparaison">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+
                 <Separator opacity="0.2" prefWidth="200.0" />
             </children>
             <padding>

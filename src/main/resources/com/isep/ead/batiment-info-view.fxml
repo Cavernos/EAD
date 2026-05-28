@@ -72,6 +72,7 @@
                     <children>
                         <Button fx:id="btnAddEnergy" mnemonicParsing="false" onAction="#onAddEnergyFromInfo" prefHeight="35.0" maxWidth="1.7976931348623157E308" style="-fx-background-color: white; -fx-text-fill: #1a8ae5; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;" text="+ Ajouter relevé" />
                         <Button mnemonicParsing="false" onAction="#onImportCsvFromInfo" prefHeight="35.0" maxWidth="1.7976931348623157E308" style="-fx-background-color: white; -fx-text-fill: #008000; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 2 6;" text="📂 Import CSV" />
+                        <Button mnemonicParsing="false" onAction="#onExportBuildingCsv" prefHeight="35.0" maxWidth="1.7976931348623157E308" style="-fx-background-color: white; -fx-text-fill: #8e44ad; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 2 6;" text="💾 Export CSV" />
                     </children>
                 </VBox>
             </children>
