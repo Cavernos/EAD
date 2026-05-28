@@ -20,8 +20,10 @@ import javafx.scene.layout.TilePane;
 import javafx.stage.FileChooser;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -293,6 +295,98 @@ public class BuildingCrudController extends CrudController {
     private void onAddEnergyFromInfo() {
         if (currentBuildingId >= 0) {
             addEnergy(currentBuildingId);
+        }
+    }
+
+    @FXML
+    private void onExportBuildingCsv() {
+        if (currentBuildingId < 0) return;
+        Building b = this.dao.getById(currentBuildingId);
+        if (b == null) return;
+
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Exporter les données du bâtiment");
+        chooser.setInitialFileName((b.getName() != null ? b.getName() : "batiment") + "_export.csv");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers CSV", "*.csv"));
+        File file = chooser.showSaveDialog(null);
+        if (file == null) return;
+
+        List<Energy> energy = new ArrayList<>();
+        energy.addAll(new DAO<>(Electricity.class).getAll().stream().filter(e -> e.getBuildingId() == currentBuildingId).toList());
+        energy.addAll(new DAO<>(Gas.class).getAll().stream().filter(e -> e.getBuildingId() == currentBuildingId).toList());
+        energy.addAll(new DAO<>(Water.class).getAll().stream().filter(e -> e.getBuildingId() == currentBuildingId).toList());
+        energy.addAll(new DAO<>(Climatisation.class).getAll().stream().filter(e -> e.getBuildingId() == currentBuildingId).toList());
+        energy.sort(java.util.Comparator.comparing(Energy::getDate));
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            bw.write("date,type,quantite,prix_unitaire,cout_estime");
+            bw.newLine();
+            for (Energy e : energy) {
+                bw.write(e.getDate() + "," + e.getClass().getSimpleName() + ","
+                    + e.getQuantity() + "," + e.getPricePerUnit() + ","
+                    + String.format("%.2f", e.getEstimatedCost()));
+                bw.newLine();
+            }
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Export réussi");
+            alert.setHeaderText(null);
+            alert.setContentText("✅ " + energy.size() + " relevé(s) exportés vers :\n" + file.getAbsolutePath());
+            alert.show();
+        } catch (Exception ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Erreur lors de l'export : " + ex.getMessage());
+            alert.show();
+        }
+    }
+
+    @FXML
+    private void onExportOrganizationCsv() {
+        if (organization == null) return;
+
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Exporter les données de l'organisation");
+        chooser.setInitialFileName(organization.getName() + "_export.csv");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers CSV", "*.csv"));
+        File file = chooser.showSaveDialog(null);
+        if (file == null) return;
+
+        List<Building> buildings = this.dao.getAll().stream()
+            .filter(b -> b.getOrganizationId() == organization.getId()).toList();
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            bw.write("batiment,type_batiment,date,type_energie,quantite,prix_unitaire,cout_estime");
+            bw.newLine();
+            for (Building b : buildings) {
+                List<Energy> energy = new ArrayList<>();
+                energy.addAll(new DAO<>(Electricity.class).getAll().stream().filter(e -> e.getBuildingId() == b.getId()).toList());
+                energy.addAll(new DAO<>(Gas.class).getAll().stream().filter(e -> e.getBuildingId() == b.getId()).toList());
+                energy.addAll(new DAO<>(Water.class).getAll().stream().filter(e -> e.getBuildingId() == b.getId()).toList());
+                energy.addAll(new DAO<>(Climatisation.class).getAll().stream().filter(e -> e.getBuildingId() == b.getId()).toList());
+                energy.sort(java.util.Comparator.comparing(Energy::getDate));
+                for (Energy e : energy) {
+                    bw.write((b.getName() != null ? b.getName() : "") + ","
+                        + b.getClass().getSimpleName() + ","
+                        + e.getDate() + "," + e.getClass().getSimpleName() + ","
+                        + e.getQuantity() + "," + e.getPricePerUnit() + ","
+                        + String.format("%.2f", e.getEstimatedCost()));
+                    bw.newLine();
+                }
+            }
+            int total = buildings.stream().mapToInt(b -> {
+                return (int)(new DAO<>(Electricity.class).getAll().stream().filter(e -> e.getBuildingId() == b.getId()).count()
+                    + new DAO<>(Gas.class).getAll().stream().filter(e -> e.getBuildingId() == b.getId()).count()
+                    + new DAO<>(Water.class).getAll().stream().filter(e -> e.getBuildingId() == b.getId()).count()
+                    + new DAO<>(Climatisation.class).getAll().stream().filter(e -> e.getBuildingId() == b.getId()).count());
+            }).sum();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Export réussi");
+            alert.setHeaderText(null);
+            alert.setContentText("✅ " + total + " relevé(s) exportés pour " + buildings.size() + " bâtiment(s) :\n" + file.getAbsolutePath());
+            alert.show();
+        } catch (Exception ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Erreur lors de l'export : " + ex.getMessage());
+            alert.show();
         }
     }
 
