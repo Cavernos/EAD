@@ -13,6 +13,10 @@ public class Appartment extends Building {
         this.residenceName = residenceName;
     }
 
+    public Appartment() {
+
+    }
+
 
     @Override
     public String toCSV() {

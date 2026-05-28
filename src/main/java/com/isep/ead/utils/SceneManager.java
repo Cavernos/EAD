@@ -2,9 +2,11 @@ package com.isep.ead.utils;
 
 import com.isep.ead.EADApplication;
 import com.isep.ead.controllers.Controller;
+import com.isep.ead.widgets.popup.Popup;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -52,6 +54,15 @@ public class SceneManager {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load template: " + view, e);
         }
+    }
+
+    public Popup loadPopup(String view) {
+        LoadedView loadedView = this.loadTemplate(view);
+        Stage stage = new Stage();
+        stage.setScene(new Scene(loadedView.getRoot()));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
+        return new Popup(stage, loadedView.getRoot(),loadedView.getController());
     }
 
 

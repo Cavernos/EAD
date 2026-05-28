@@ -11,10 +11,10 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<VBox prefHeight="612.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.OrganizationCrudController">
+<VBox prefHeight="612.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.crud.BuildingCrudController">
     <children>
 
-        <Label text="nom orga">
+        <Label fx:id="nameOrga">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>

@@ -1,10 +1,13 @@
 package com.isep.ead.controllers.templates;
 
+import com.isep.ead.controllers.MainController;
+import com.isep.ead.controllers.crud.BuildingCrudController;
 import com.isep.ead.controllers.crud.OrganizationCrudController;
 import com.isep.ead.models.organization.Organization;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 
 public class OrganizationItemController extends TemplateController {
 
@@ -16,8 +19,6 @@ public class OrganizationItemController extends TemplateController {
     public Button modifyButton;
     @FXML
     public Button deleteButton;
-
-    private OrganizationCrudController crudController;
 
     public void setData(Organization organization) {
         this.itemId = organization.getId();
@@ -35,5 +36,12 @@ public class OrganizationItemController extends TemplateController {
     @FXML
     private void onDelete() {
         super.delete();
+    }
+
+    public void switchToConsoView(MouseEvent mouseEvent) {
+        BuildingCrudController controller =
+                (BuildingCrudController) ((MainController)this.sceneManager.loadPage("menu-view").getController()).switchView("batiment-view");
+        controller.setOrganization(this.itemId);
+        controller.index();
     }
 }

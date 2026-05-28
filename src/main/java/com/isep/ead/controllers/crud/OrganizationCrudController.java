@@ -6,6 +6,7 @@ import com.isep.ead.dao.DAO;
 import com.isep.ead.models.organization.Organization;
 import com.isep.ead.templates.OrganizationItem;
 import com.isep.ead.utils.LoadedView;
+import com.isep.ead.widgets.popup.Popup;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -37,43 +38,36 @@ public class OrganizationCrudController extends CrudController {
 
     @Override
     public void add() {
-        Stage stage = new Stage();
-        this.sceneManager.setMainStage(stage);
-        stage.setTitle("Ajout d'une organisation");
-        LoadedView view = this.sceneManager.loadTemplate("views/popup/FormPopup");
-        this.sceneManager.setMainStage(stage);
-        FormPopupController controller = (FormPopupController) this.sceneManager.switchTo(view);
+        Popup popup = this.sceneManager.loadPopup("views/popup/FormPopup");
+        popup.setTitle("Ajout d'une organisation");
+        FormPopupController controller = (FormPopupController) popup.getController();
         controller.setPopupName("Nouvelle Organisation");
         controller.addField("name", "Nom de l'organisation *");
         controller.addField("owner", "Propriétaire");
-        stage.show();
-        controller.setOnSubmitAction(() -> {
+        popup.show();
+        popup.onSubmit(() -> {
             Organization organization = new Organization();
             organization.setName(controller.getValues("name"));
             organization.setOwner(controller.getValues("owner"));
             this.dao.create(organization);
-            stage.close();
             this.index();
         });
 
     }
 
     public void modify(int id) {
-        Stage stage = new Stage();
         Organization organization = this.dao.getById(id);
-        stage.setTitle("Modification d'une organisation");
-        LoadedView view = this.sceneManager.loadTemplate("views/popup/FormPopup");
-        this.sceneManager.setMainStage(stage);
-        FormPopupController controller = (FormPopupController) this.sceneManager.switchTo(view);
+        Popup popup = this.sceneManager.loadPopup("views/popup/FormPopup");
+        popup.setTitle("Modification d'une organisation");
+        FormPopupController controller = (FormPopupController) popup.getController();
         controller.setPopupName("Modifier l'Organisation");
         controller.addField("name", "Nom de l'organisation *", organization.getName());
         controller.addField("owner", "Propriétaire");
-        stage.show();
-        controller.setOnSubmitAction(() -> {
+        popup.show();
+        popup.onSubmit(() -> {
             organization.setName(controller.getValues("name"));
             organization.setOwner(controller.getValues("owner"));
             this.dao.update(organization);
-            stage.close();
             this.index();
         });
 
@@ -81,7 +75,6 @@ public class OrganizationCrudController extends CrudController {
     }
 
     public void delete(int id) {
-        //System.out.println(id);
         this.dao.remove(this.dao.getById(id));
         this.index();
     }

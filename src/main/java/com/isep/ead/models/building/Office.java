@@ -10,6 +10,10 @@ public class Office extends Building {
         this.numberOfEmployees = numberOfEmployees;
     }
 
+    public Office() {
+
+    }
+
 
     @Override
     public String toCSV() {

@@ -13,6 +13,10 @@ public class House extends Building {
         this.hasGarden = hasGarden;
     }
 
+    public House() {
+
+    }
+
 
     @Override
     public String toCSV() {

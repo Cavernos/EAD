@@ -9,6 +9,10 @@ public class Shop extends Building {
         this.activitySector = activitySector;
     }
 
+    public Shop() {
+
+    }
+
 
     @Override
     public String toCSV() {

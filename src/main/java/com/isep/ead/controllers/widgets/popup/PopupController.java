@@ -18,7 +18,7 @@ public class PopupController extends Controller {
 
     @FXML
     private void onCancel() {
-        ((Stage)this.contentBox.getScene().getWindow()).close();
+        ((Stage)this.cancelButton.getScene().getWindow()).close();
     }
 
     @FXML
