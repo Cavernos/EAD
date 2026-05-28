@@ -1,19 +1,19 @@
 package com.isep.ead;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
-import java.io.IOException;
+import com.isep.ead.controllers.MainController;
+import com.isep.ead.utils.SceneManager;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 public class EADApplication extends Application {
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(EADApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
+    public void start(Stage stage) {
+        SceneManager sceneManager = new SceneManager(stage);
+        MainController controller = (MainController) sceneManager.switchTo(sceneManager.loadPage("menu-view"));
+        controller.dashboard();
+        stage.setTitle("EAD");
         stage.show();
+
     }
 }

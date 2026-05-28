@@ -7,18 +7,42 @@ skinparam shadowing false
 ' ══════════════════════════════
 '           ENUM
 ' ══════════════════════════════
-class Model {
+interface IModel<T> {
+    - int id;
+    + void setId(int id);
+    + int getId();
     + String toCSV();
-    + static Model fromCSV(String csv);
+    + T fromCSV(String[] fields);
+}
+' ===============================
+' DAO
+' ===============================
+interface IDAO<T> {
+- static int idSequence
++ create(T object): T
++ getById(int id): T
++ getAll(): List<T>
++ remove(T object): T
++ update(T object): T
+}
+
+class DAO<T extends IModel<T>> {
+
++ create(IModel building): IModel
++ getById(int id): IModel
++ getAll(): List<IModel>
++ remove(IModel building): IModel
++ update(IModel building): IModel
 }
 ' ================================
-' Organisation
+' Organization
 '=================================
 
 
 class Organization {
     #int id
     - String name
+    - String owner
     - List<Building> buildings
     - int numberOfBuildings
     + addBuilding(b: Building): void
@@ -50,7 +74,6 @@ class Building {
   + getEnergyTypes(): List<Energy>
   + getTotalConsumption(): double
   + getEstimatedCost(): double
-  + clone(): Building
 }
 
 ' ══════════════════════════════
@@ -130,51 +153,61 @@ class Dashboard {
   + getAlerts(): List<Alert>
 }
 
+
+
 ' ══════════════════════════════
 '     IMPORT / EXPORT / TEST
 ' ══════════════════════════════
 
 class CSVHandler {
-  + importReadings(filePath: String): List<Energy>
-  + exportReadings(readings: List<Energy>, filePath: String): void
+  - String filename
+  + void write(String row)
+  + void write(String[] rows)
+  + void remove(int id)
+  + String update(int id, String newRow)
+  - void flushFile(String[] rows)
+  + String getLastRow()
+  + String[] read()
 }
 
-' ===============================
-' DAO
-' ===============================
-interface IDAO {
-- static int idSequence
-+ create(Object object): Object
-+ getById(int id): Object
-+ remove(Object object): Object
-+ update(Object object): Object
-}
-
-class BuildingDAO {
-
-+ create(Building building): Building
-+ getById(int id): Building
-+ remove(Building building): Building
-+ update(Building building): Building
-}
-
-class EnergyDAO {
-+ create(Energy energy): Energy
-+ getById(int id): Energy
-+ remove(Energy energy): Energy
-+ update(Energy energy): Energy
-}
-
-class OrganizationDAO {
-+ create(Organization organization): Organization
-+ getById(int id): Organization
-+ remove(Organization organization): Organization
-+ update(Organization organization): Organization
+class SceneManager {
+    -Stage mainStage
+    - Scene actualScene
+    -FXMLLoader lastLoader
+    +SceneManager(Stage stage)
+    +setMainStage(Stage mainStage)
+    + Controller switchTo(String view)
+   + Scene loadScene(String view)
+   + Controller getSceneController()
+   - FXMLLoader loadPath(String views)
 }
 
 ' ===============================
 ' Controllers
 ' ===============================
+abstract class Controller {
+    - SceneManager sceneManager
+    + setSceneManager(SceneManager sceneManager)
+}
+interface ICrudController {
+    +index()
+    + add()
+    + modify()
+    + remove()
+}
+class CrudController {
+    -Button createButton
+    -Button modifyButton
+    -Button deleteButton
+    -Map<Button, Runnable> buttonAction
+    #initialize()
+    +index()
+    + add()
+    + modify()
+    + remove()
+    <<FXML>> - onClick(ActionEvent event)
+}
+
 class BuildingCrudController {
 }
 
@@ -182,6 +215,33 @@ class EnergyCrudController {
 }
 
 class OrganizationCrudController {
+}
+
+' POPUP
+class PopupController {
+    <<FXML>> - VBox contentBox
+    <<FXML>> # Button submitButton
+    <<FXML>> - Button cancelButton
+    <<FXML>> - onCancel()
+    <<FXML>> - onSave()
+}
+class FormPopupController {
+    - Map<String, FormInputController> fields
+    - Runnable onSubmitAction
+    <<FXML>> + Label nameLabel
+    <<FXML>> - VBox contentBox
+    + addField(String name, String labelText)
+    + setPopupName(String name)
+    + getValues(String name)
+    + setOnSubmitAction(Runnable action)
+    <<FXML>> - onFormSave()
+}
+
+class FormInputController {
+    <<FXML>> - Label inputName
+    <<FXML>> - TextField inputField
+    + String getValue()
+    + setText(String inputName)
 }
 
 ' ==============================
@@ -201,9 +261,9 @@ class EnergyView <<FXML_VIEW>> {
 ' ══════════════════════════════
 
 'Heritage de Model
-Model <|-- Organization
-Model <|-- Building
-Model <|-- Energy
+IModel <|-- Organization
+IModel <|-- Building
+IModel <|-- Energy
 ' Héritage Organization
 Organization <|-- University
 ' Héritage Building
@@ -220,9 +280,8 @@ Energy <|-- Gas
 Energy <|-- Climatisation
 
 ' Héritage DAO
-IDAO <|-- EnergyDAO
-IDAO <|-- BuildingDAO
-IDAO <|-- OrganizationDAO
+IDAO <|-- DAO
+
 
 ' Composition
 Dashboard "1" *-- "0..*" Organization: gère
@@ -231,14 +290,23 @@ Building  "1" *-- "0..*" Energy   : enregistre
 Building  "1" *-- "0..*" Alert    : génère
 
 ' Dépendances utilitaires
-CSVHandler   ..> Energy  : importe/exporte
+CSVHandler   ..> DAO  : importe/exporte
 
 ' MVC
-EnergyCrudController  <-- EnergyDAO: utilise
+SceneManager ..> Controller: Gère le changement de scène des
+Controller <|-- CrudController
+ICrudController <|-- CrudController
+EnergyCrudController  <-- DAO: utilise
 EnergyCrudController <-- EnergyView: met à jour
-BuildingCrudController <-- BuildingDAO: utilise
+BuildingCrudController <-- DAO: utilise
 BuildingCrudController <-- BuildingView: met à jour
 OrganizationCrudController <-- OrganizationDAO: utilise
 OrganizationCrudController <-- OrganizationView: met à jour
+
+' Popup
+Controller <|-- PopupController
+Controller <|-- FormInputController
+PopupController <|-- FormPopupController
+FormPopupController ..> FormInputController: utilise
 @enduml
 

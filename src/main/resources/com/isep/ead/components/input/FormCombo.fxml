@@ -1,0 +1,25 @@
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<VBox spacing="5.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.widgets.inputs.FormComboController">
+    <children>
+        <Label fx:id="inputName" text="Type de bâtiment *">
+            <font>
+                <Font name="System Bold" size="13.0" />
+            </font>
+        </Label>
+        <ComboBox fx:id="comboBox" maxWidth="1.7976931348623157E308" prefHeight="35.0" promptText="Choisir" style="-fx-background-color: #f8f9fa; -fx-border-color: #dcdde1; -fx-border-radius: 5;">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="House" />
+                    <String fx:value="Apartment" />
+                    <String fx:value="Office" />
+                    <String fx:value="Shop" />
+                    <String fx:value="University" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+    </children>
+</VBox>
