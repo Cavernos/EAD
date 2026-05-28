@@ -1,6 +1,8 @@
 package com.isep.ead.models.building;
 
 
+import com.isep.ead.models.IModel;
+
 public class Appartment extends Building {
 
     private int    floor;
@@ -17,6 +19,10 @@ public class Appartment extends Building {
 
     }
 
+    @Override
+    public String getFrenchType() {
+        return "Appartement";
+    }
 
     @Override
     public String toCSV() {

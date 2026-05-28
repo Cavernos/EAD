@@ -3,7 +3,7 @@ package com.isep.ead.models;
 /**
  * Contrat de sérialisation CSV pour tous les modèles métier.
  */
-public interface IModel<T> {
+public interface IModel<T extends IModel<T>> {
 
     /**
      * Sérialise l'objet en ligne CSV (séparateur virgule, sans préfixe de type).

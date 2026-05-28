@@ -55,12 +55,12 @@ public class FormPopupController extends PopupController {
         this.addField(name, labelText, "", type);
     }
 
-    public void addComboField(String name, String labelText, ArrayList<String> items, String defaultValue) {
+    public void addComboField(String name, String labelText, String[] items, String defaultValue) {
         LoadedView lv = this.addField("components/input/FormCombo", name, labelText, defaultValue);
         ((FormComboController) lv.getController()).setItems(items);
     }
 
-    public void addComboField(String name, String labelText, ArrayList<String> items) {
+    public void addComboField(String name, String labelText, String[] items) {
         this.addComboField(name, labelText, items, "");
     }
 

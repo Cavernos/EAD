@@ -1,5 +1,8 @@
 package com.isep.ead.models.energy;
 
+import com.isep.ead.models.IModel;
+import com.isep.ead.models.Model;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 

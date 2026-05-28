@@ -1,6 +1,8 @@
 package com.isep.ead.models.building;
 
 
+import com.isep.ead.models.IModel;
+
 public class House extends Building {
 
     private int numberOfRooms;
@@ -37,7 +39,10 @@ public class House extends Building {
         return house;
     }
 
-
+    @Override
+    public String getFrenchType() {
+        return "Maison";
+    }
 
     public int getNumberOfRooms() {
         return numberOfRooms;

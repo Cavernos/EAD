@@ -3,23 +3,23 @@ package com.isep.ead.controllers.crud;
 import com.isep.ead.controllers.widgets.inputs.FormInputController;
 import com.isep.ead.controllers.widgets.popup.FormPopupController;
 import com.isep.ead.dao.DAO;
+import com.isep.ead.models.IModel;
+import com.isep.ead.models.Model;
 import com.isep.ead.models.building.*;
 import com.isep.ead.models.building.School;
-import com.isep.ead.models.building.UniversityBuilding;
 import com.isep.ead.models.energy.*;
 import com.isep.ead.models.organization.Organization;
 import com.isep.ead.templates.BuildingItem;
 import com.isep.ead.widgets.popup.Popup;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.TilePane;
 import javafx.stage.FileChooser;
+import javafx.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -45,8 +45,17 @@ public class BuildingCrudController extends CrudController {
     @FXML private Label lblMonthlyCost;
     @FXML private StackedBarChart<String, Number> stackedBarChart;
 
+    private final Map<String, Supplier<Building>> buildingTypes = Map.of(
+            "Maison", House::new,
+            "Appartement", Appartment::new,
+            "Bureau", Office::new,
+            "Commerce", Shop::new,
+            "Ecole", School::new
+    );
+
     private int currentBuildingId = -1;
     private Organization organization;
+
     private final DAO<Building> dao = new DAO<>(Building.class);
 
     @FXML
@@ -72,11 +81,11 @@ public class BuildingCrudController extends CrudController {
         if (nameOrga != null) this.nameOrga.setText(this.organization.getName());
         if (organizationsGrid == null) return;
         List<Building> buildings = this.dao.getAll().stream()
-            .filter(b -> b.getOrganizationId() == this.organization.getId())
+            .filter(building -> building.getOrganizationId() == this.organization.getId())
             .toList();
         organizationsGrid.getChildren().clear();
-        for (Building b : buildings) {
-            organizationsGrid.getChildren().add(new BuildingItem(b, this.sceneManager).getView());
+        for (Building building : buildings) {
+            organizationsGrid.getChildren().add(new BuildingItem(building, this.sceneManager).getView());
         }
     }
 
@@ -90,48 +99,39 @@ public class BuildingCrudController extends CrudController {
         controller.addField("address", "Adresse *");
         controller.addField("surface", "Surface (m²) *", "", FormInputController.FieldType.DOUBLE);
         controller.addComboField("type", "Type de bâtiment *",
-            new ArrayList<>(List.of("Maison", "Appartement", "Bureau", "Boutique", "École", "Université")));
+            this.buildingTypes.keySet().toArray(new String[0]));
         popup.show();
         popup.onSubmit(() -> {
-            String selectedFr = controller.getValues("type");
-            String className = com.isep.ead.models.building.Building.fromFrench(selectedFr);
-            Map<String, Supplier<Building>> map = Map.of(
-                "House", House::new, "Appartment", Appartment::new,
-                "Office", Office::new, "Shop", Shop::new,
-                "School", School::new, "UniversityBuilding", UniversityBuilding::new
-            );
-            Building b = map.getOrDefault(className, Building::new).get();
-            b.setName(controller.getValues("name"));
-            b.setAddress(controller.getValues("address"));
-            try { b.setSurface(Double.parseDouble(controller.getValues("surface"))); }
-            catch (NumberFormatException ignored) { b.setSurface(0); }
-            b.setOrganizationId(this.organization.getId());
-            this.dao.create(b);
+            Building building = this.buildingTypes.getOrDefault(controller.getValues("type"), Building::new).get();
+            building.setName(controller.getValues("name"));
+            building.setAddress(controller.getValues("address"));
+            try { building.setSurface(Double.parseDouble(controller.getValues("surface"))); }
+            catch (NumberFormatException ignored) { building.setSurface(0); }
+            building.setOrganizationId(this.organization.getId());
+            this.dao.create(building);
             this.index();
-            refreshOrgView();
         });
     }
 
     @Override
     public void modify(int id) {
-        Building b = this.dao.getById(id);
-        if (b == null) return;
+        Building building = this.dao.getById(id);
+        if (building == null) return;
         Popup popup = this.sceneManager.loadPopup("views/popup/FormPopup");
         popup.setTitle("Modifier le bâtiment");
         FormPopupController controller = (FormPopupController) popup.getController();
         controller.setPopupName("Modifier le bâtiment");
-        controller.addField("name", "Nom du bâtiment *", b.getName());
-        controller.addField("address", "Adresse *", b.getAddress());
-        controller.addField("surface", "Surface (m²) *", String.valueOf(b.getSurface()), FormInputController.FieldType.DOUBLE);
+        controller.addField("name", "Nom du bâtiment *", building.getName());
+        controller.addField("address", "Adresse *", building.getAddress());
+        controller.addField("surface", "Surface (m²) *", String.valueOf(building.getSurface()), FormInputController.FieldType.DOUBLE);
         popup.show();
         popup.onSubmit(() -> {
-            b.setName(controller.getValues("name"));
-            b.setAddress(controller.getValues("address"));
-            try { b.setSurface(Double.parseDouble(controller.getValues("surface"))); }
+            building.setName(controller.getValues("name"));
+            building.setAddress(controller.getValues("address"));
+            try { building.setSurface(Double.parseDouble(controller.getValues("surface"))); }
             catch (NumberFormatException ignored) {}
-            this.dao.update(b);
+            this.dao.update(building);
             this.index();
-            refreshOrgView();
         });
     }
 
@@ -140,7 +140,6 @@ public class BuildingCrudController extends CrudController {
         deleteEnergyForBuilding(id);
         this.dao.remove(this.dao.getById(id));
         this.index();
-        refreshOrgView();
     }
 
     public void clone(int id) {
@@ -157,8 +156,6 @@ public class BuildingCrudController extends CrudController {
             Shop cs = new Shop(); cs.setActivitySector(sh.getActivitySector()); copy = cs;
         } else if (original instanceof School sc) {
             School csc = new School(); csc.setNumberOfStudents(sc.getNumberOfStudents()); copy = csc;
-        } else if (original instanceof UniversityBuilding ub) {
-            UniversityBuilding cub = new UniversityBuilding(); cub.setNumberOfStudents(ub.getNumberOfStudents()); copy = cub;
         } else {
             copy = new Building();
         }
@@ -168,7 +165,7 @@ public class BuildingCrudController extends CrudController {
         copy.setOrganizationId(original.getOrganizationId());
         this.dao.create(copy);
         this.index();
-        refreshOrgView();
+        //refreshOrgView();
     }
 
     private void deleteEnergyForBuilding(int buildingId) {
@@ -182,24 +179,13 @@ public class BuildingCrudController extends CrudController {
         climaDao.getAll().stream().filter(e -> e.getBuildingId() == buildingId).forEach(climaDao::remove);
     }
 
-    /**
-     * Rafraîchit la vue organisation (compteur bâtiments à jour).
-     * N'utilise que l'instance déjà cachée — ne crée pas de vue inutilement.
-     */
-    private void refreshOrgView() {
-        var lv = this.sceneManager.getCachedPage("organisation-view");
-        if (lv != null && lv.getController() instanceof OrganizationCrudController c) {
-            c.index();
-        }
-    }
-
     public void addEnergy(int buildingId) {
         Popup popup = this.sceneManager.loadPopup("views/popup/FormPopup");
         popup.setTitle("Ajouter une consommation");
         FormPopupController controller = (FormPopupController) popup.getController();
         controller.setPopupName("Nouvelle consommation");
         controller.addComboField("type", "Type d'énergie *",
-            new ArrayList<>(List.of("Electricity", "Gas", "Water", "Climatisation")));
+            new String[]{"Electricity", "Gas", "Water", "Climatisation"});
         controller.addField("date", "Date *", LocalDate.now().toString(), FormInputController.FieldType.DATE);
         controller.addField("time", "Heure *", LocalTime.now().withSecond(0).withNano(0).toString(), FormInputController.FieldType.TIME);
         controller.addField("quantity", "Quantité (kWh / m³) *", "", FormInputController.FieldType.DOUBLE);
@@ -209,9 +195,9 @@ public class BuildingCrudController extends CrudController {
             controller.removeField("extra");
             switch (type) {
                 case "Electricity" -> controller.addComboField("extra", "Heures creuses",
-                    new ArrayList<>(List.of("Non", "Oui")));
+                    new String[]{"Non", "Oui"});
                 case "Water" -> controller.addComboField("extra", "Eau chaude",
-                    new ArrayList<>(List.of("Non", "Oui")));
+                    new String[]{"Non", "Oui"});
                 case "Climatisation" -> controller.addField("extra", "Température cible (°C)", "20.0", FormInputController.FieldType.DOUBLE);
             }
         });

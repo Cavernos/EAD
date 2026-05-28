@@ -24,7 +24,7 @@ public class BuildingItemController extends TemplateController {
     public void setData(Building building) {
         this.itemId = building.getId();
         this.lblCardTitle.setText(building.getName() != null ? building.getName() : "Bâtiment");
-        this.lblCardBuildings.setText(Building.toFrench(building.getClass().getSimpleName()));
+        this.lblCardBuildings.setText(building.getFrenchType());
         super.setData("batiment-view");
     }
 

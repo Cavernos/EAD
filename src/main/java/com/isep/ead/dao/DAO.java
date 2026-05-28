@@ -1,6 +1,7 @@
 package com.isep.ead.dao;
 
 import com.isep.ead.models.IModel;
+import com.isep.ead.models.Model;
 import com.isep.ead.utils.CSVHandler;
 
 import java.lang.reflect.InvocationTargetException;
@@ -49,7 +50,7 @@ public class DAO<T extends IModel<T>> implements IDAO<T> {
         List<T> records = new ArrayList<>();
         for (String row : rows) {
             if (row.contains(",")) {
-                T model = Objects.requireNonNull(this.createNewModelInstance()).fromCSV(row.split(","));
+                T model =  Objects.requireNonNull(this.createNewModelInstance()).fromCSV(row.split(","));
                 records.add(model);
             }
         }

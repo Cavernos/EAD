@@ -1,5 +1,7 @@
 package com.isep.ead.models.building;
 
+import com.isep.ead.models.IModel;
+
 public class Office extends Building {
     private int numberOfRooms;
     private int numberOfEmployees;
@@ -48,5 +50,10 @@ public class Office extends Building {
 
     public void setNumberOfEmployees(int n) {
         this.numberOfEmployees = n;
+    }
+
+    @Override
+    public String getFrenchType() {
+        return "Bureau";
     }
 }

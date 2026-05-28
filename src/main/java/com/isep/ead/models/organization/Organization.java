@@ -1,12 +1,13 @@
 package com.isep.ead.models.organization;
 
 import com.isep.ead.models.IModel;
+import com.isep.ead.models.Model;
 import com.isep.ead.models.building.Building;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Organization implements IModel<Organization> {
+public class Organization extends Model<Organization>{
 
 
     protected int id;

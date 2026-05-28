@@ -13,6 +13,10 @@ public class Shop extends Building {
 
     }
 
+    @Override
+    public String getFrenchType() {
+        return "Magasin";
+    }
 
     @Override
     public String toCSV() {

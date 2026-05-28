@@ -29,6 +29,11 @@ public class School extends Building {
         return school;
     }
 
+    @Override
+    public String getFrenchType() {
+        return "Ecole";
+    }
+
     public int getNumberOfStudents() { return numberOfStudents; }
     public void setNumberOfStudents(int n) { this.numberOfStudents = n; }
 }

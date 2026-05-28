@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 
-public class Water extends Energy implements IModel<Water> {
+public class Water extends Energy implements IModel<Water>{
 
     private boolean isHotWater;
     private static final double HOT_WATER_SURCHARGE = 0.20;

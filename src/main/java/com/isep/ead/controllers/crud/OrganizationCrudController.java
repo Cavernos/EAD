@@ -6,6 +6,7 @@ import com.isep.ead.models.building.Building;
 import com.isep.ead.models.energy.*;
 import com.isep.ead.models.organization.Organization;
 import com.isep.ead.templates.OrganizationItem;
+import com.isep.ead.utils.LoadedView;
 import com.isep.ead.widgets.popup.Popup;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -90,7 +91,7 @@ public class OrganizationCrudController extends CrudController {
         this.dao.remove(this.dao.getById(id));
         this.index();
         // Si batiment-view est en cache, on le vide aussi
-        var lv = this.sceneManager.getCachedPage("batiment-view");
+        LoadedView lv = this.sceneManager.getCachedPage("batiment-view");
         if (lv != null && lv.getController() instanceof BuildingCrudController c) {
             c.clearOrganization();
         }

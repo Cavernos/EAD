@@ -1,6 +1,7 @@
 package com.isep.ead.models.building;
 
 import com.isep.ead.models.IModel;
+import com.isep.ead.models.Model;
 import com.isep.ead.models.alert.Alert;
 import com.isep.ead.models.alert.AlertLevel;
 import com.isep.ead.models.energy.Energy;
@@ -113,64 +114,24 @@ public class Building implements IModel<Building> {
 
     @Override
     public String toCSV() {
-        return String.format("%s,%s,%s,%s,%s,%s", this.id, getClass().getSimpleName(), this.name, this.address, this.surface, this.organizationId);
-    }
-
-    private static final java.util.Set<String> KNOWN_TYPES =
-        java.util.Set.of("Building", "House", "Appartment", "Office", "Shop", "School", "UniversityBuilding");
-
-    /** Traduit le nom de classe Java en label français pour l'UI. */
-    public static String toFrench(String className) {
-        return switch (className) {
-            case "House"               -> "Maison";
-            case "Appartment"          -> "Appartement";
-            case "Office"              -> "Bureau";
-            case "Shop"                -> "Boutique";
-            case "School"              -> "École";
-            case "UniversityBuilding"  -> "Université";
-            default                    -> "Bâtiment";
-        };
-    }
-
-    /** Traduit un label français (UI) en nom de classe Java. */
-    public static String fromFrench(String label) {
-        return switch (label) {
-            case "Maison"       -> "House";
-            case "Appartement"  -> "Appartment";
-            case "Bureau"       -> "Office";
-            case "Boutique"     -> "Shop";
-            case "École"        -> "School";
-            case "Université"   -> "UniversityBuilding";
-            default             -> "Building";
-        };
+        return String.format("%s,%s,%s,%s,%s,%s",
+                this.id, getClass().getSimpleName(),
+                this.name,
+                this.address,
+                this.surface,
+                this.organizationId
+        );
     }
 
     @Override
     public Building fromCSV(String[] fields) {
-        // Nouveau format: 0=id, 1=type, 2=name, 3=address, 4=surface, 5=organizationId
-        // Ancien format:  0=id, 1=name, 2=address, 3=surface, 4=organizationId
-        boolean newFormat = fields.length > 1 && KNOWN_TYPES.contains(fields[1]);
-        int offset = newFormat ? 2 : 1;
-
-        Building building = newFormat ? switch (fields[1]) {
-            case "House"              -> new House();
-            case "Appartment"         -> new Appartment();
-            case "Office"             -> new Office();
-            case "Shop"               -> new Shop();
-            case "School"             -> new School();
-            case "UniversityBuilding" -> new UniversityBuilding();
-            default                   -> new Building();
-        } : new Building();
-
-        try { building.setId(Integer.parseInt(fields[0])); } catch (Exception ignored) {}
-        if (fields.length > offset)     building.setName(fields[offset]);
-        if (fields.length > offset + 1) building.setAddress(fields[offset + 1]);
-        if (fields.length > offset + 2) {
-            try { building.setSurface(Double.parseDouble(fields[offset + 2])); } catch (Exception ignored) {}
-        }
-        if (fields.length > offset + 3) {
-            try { building.setOrganizationId(Integer.parseInt(fields[offset + 3])); } catch (Exception ignored) {}
-        }
+        Building building = new Building(fields[2], fields[3], Double.parseDouble(fields[4]));
+        building.setId(Integer.parseInt(fields[0]));
+        building.setOrganizationId(Integer.parseInt(fields[5]));
         return building;
+    }
+
+    public String getFrenchType() {
+        return "Bâtiment";
     }
 }

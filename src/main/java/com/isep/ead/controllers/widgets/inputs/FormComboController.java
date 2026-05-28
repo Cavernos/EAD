@@ -43,7 +43,7 @@ public class FormComboController extends FormInputController{
         this.inputName.setText(inputName);
     }
 
-    public void setItems(List<String> items) {
+    public void setItems(String[] items) {
         this.comboBox.setItems(FXCollections.observableArrayList(items));
     }
 

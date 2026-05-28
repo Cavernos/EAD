@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 
-public class Gas extends Energy implements IModel<Gas> {
+public class Gas extends Energy implements IModel<Gas>{
 
     public Gas() {
         super(LocalDate.now(), 0, 0);
