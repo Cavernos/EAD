@@ -20,13 +20,20 @@ public class House extends Building {
 
     @Override
     public String toCSV() {
-        return id + "," + name + "," + address + "," + surface + "," + numberOfRooms + "," + hasGarden;
+        return id + ",House," + name + "," + address + "," + surface + "," + organizationId + "," + numberOfRooms + "," + hasGarden;
     }
 
+    @Override
     public House fromCSV(String[] fields) {
-        House house = new House(fields[1], fields[2], Double.parseDouble(fields[3]),
-                Integer.parseInt(fields[4]), Boolean.parseBoolean(fields[5]));
+        // format: id,House,name,address,surface,organizationId[,numberOfRooms,hasGarden]
+        House house = new House();
         house.setId(Integer.parseInt(fields[0]));
+        house.setName(fields[2]);
+        house.setAddress(fields[3]);
+        try { house.setSurface(Double.parseDouble(fields[4])); } catch (Exception ignored) {}
+        if (fields.length > 5) try { house.setOrganizationId(Integer.parseInt(fields[5])); } catch (Exception ignored) {}
+        if (fields.length > 6) try { house.setNumberOfRooms(Integer.parseInt(fields[6])); } catch (Exception ignored) {}
+        if (fields.length > 7) try { house.setHasGarden(Boolean.parseBoolean(fields[7])); } catch (Exception ignored) {}
         return house;
     }
 

@@ -15,6 +15,7 @@ public class Building implements IModel<Building> {
     protected String name;
     protected String address;
     protected double surface;
+    protected int organizationId;
 
     protected List<Energy> energyTypes;
     protected List<Alert>  alerts;
@@ -99,6 +100,9 @@ public class Building implements IModel<Building> {
     public double getSurface()           { return surface; }
     public void setSurface(double s)     { this.surface = s; }
 
+    public int getOrganizationId()              { return organizationId; }
+    public void setOrganizationId(int orgId)    { this.organizationId = orgId; }
+
     @Override
     public String toString() {
         return getClass().getSimpleName()
@@ -109,14 +113,36 @@ public class Building implements IModel<Building> {
 
     @Override
     public String toCSV() {
-        return String.format("%s,%s,%s,%s", this.id,this.name, this.address, this.surface);
+        return String.format("%s,%s,%s,%s,%s,%s", this.id, getClass().getSimpleName(), this.name, this.address, this.surface, this.organizationId);
     }
+
+    private static final java.util.Set<String> KNOWN_TYPES =
+        java.util.Set.of("Building", "House", "Appartment", "Office", "Shop");
 
     @Override
     public Building fromCSV(String[] fields) {
-        Building building = new Building(fields[1], fields[2], Double.parseDouble(fields[3]));
-        building.setId(Integer.parseInt(fields[0]));
+        // Nouveau format: 0=id, 1=type, 2=name, 3=address, 4=surface, 5=organizationId
+        // Ancien format:  0=id, 1=name, 2=address, 3=surface, 4=organizationId
+        boolean newFormat = fields.length > 1 && KNOWN_TYPES.contains(fields[1]);
+        int offset = newFormat ? 2 : 1;
+
+        Building building = newFormat ? switch (fields[1]) {
+            case "House"      -> new House();
+            case "Appartment" -> new Appartment();
+            case "Office"     -> new Office();
+            case "Shop"       -> new Shop();
+            default           -> new Building();
+        } : new Building();
+
+        try { building.setId(Integer.parseInt(fields[0])); } catch (Exception ignored) {}
+        if (fields.length > offset)     building.setName(fields[offset]);
+        if (fields.length > offset + 1) building.setAddress(fields[offset + 1]);
+        if (fields.length > offset + 2) {
+            try { building.setSurface(Double.parseDouble(fields[offset + 2])); } catch (Exception ignored) {}
+        }
+        if (fields.length > offset + 3) {
+            try { building.setOrganizationId(Integer.parseInt(fields[offset + 3])); } catch (Exception ignored) {}
+        }
         return building;
     }
 }
-

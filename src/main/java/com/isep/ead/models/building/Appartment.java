@@ -20,14 +20,20 @@ public class Appartment extends Building {
 
     @Override
     public String toCSV() {
-        return id + "," + name + "," + address + "," + surface + "," + floor + "," + residenceName;
+        return id + ",Appartment," + name + "," + address + "," + surface + "," + organizationId + "," + floor + "," + residenceName;
     }
 
-    public static Appartment fromCSV(String csv) {
-        String[] p = csv.split(",");
-        Appartment a = new Appartment(p[1], p[2], Double.parseDouble(p[3]),
-                Integer.parseInt(p[4]), p[5]);
-        a.setId(Integer.parseInt(p[0]));
+    @Override
+    public Appartment fromCSV(String[] fields) {
+        // format: id,Appartment,name,address,surface,organizationId[,floor,residenceName]
+        Appartment a = new Appartment();
+        a.setId(Integer.parseInt(fields[0]));
+        a.setName(fields[2]);
+        a.setAddress(fields[3]);
+        try { a.setSurface(Double.parseDouble(fields[4])); } catch (Exception ignored) {}
+        if (fields.length > 5) try { a.setOrganizationId(Integer.parseInt(fields[5])); } catch (Exception ignored) {}
+        if (fields.length > 6) try { a.setFloor(Integer.parseInt(fields[6])); } catch (Exception ignored) {}
+        if (fields.length > 7) a.setResidenceName(fields[7]);
         return a;
     }
 

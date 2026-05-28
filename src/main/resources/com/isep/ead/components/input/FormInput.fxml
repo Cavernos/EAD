@@ -12,5 +12,6 @@
             </font>
         </Label>
         <TextField fx:id="inputField" prefHeight="38.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #dcdde1; -fx-border-radius: 5; -fx-background-radius: 5;" />
+        <Label fx:id="errorLabel" managed="false" style="-fx-text-fill: #e74c3c; -fx-font-size: 11;" visible="false" />
     </children>
 </VBox>

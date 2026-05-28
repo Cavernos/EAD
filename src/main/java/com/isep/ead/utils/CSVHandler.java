@@ -29,7 +29,11 @@ public class CSVHandler {
     public void remove(int id) {
         String[] rows = this.read();
         ArrayList<String> rowsList = new ArrayList<>(List.of(rows));
-        rowsList.removeIf(row -> id == Integer.parseInt(row.split(",")[0]));
+        rowsList.removeIf(row -> {
+            String[] parts = row.split(",");
+            try { return parts.length > 0 && id == Integer.parseInt(parts[0].trim()); }
+            catch (NumberFormatException e) { return false; }
+        });
         flushFile(rowsList.toArray(new String[0]));
     }
 
@@ -37,9 +41,11 @@ public class CSVHandler {
 
         String[] rows = this.read();
         for (int i = 0; i< rows.length; i++) {
-            if(Integer.parseInt(rows[i].split(",")[0]) == id) {
-                rows[i] = newRow;
-            }
+            try {
+                if(Integer.parseInt(rows[i].split(",")[0].trim()) == id) {
+                    rows[i] = newRow;
+                }
+            } catch (NumberFormatException ignored) {}
         }
         flushFile(rows);
         return newRow;
@@ -65,13 +71,13 @@ public class CSVHandler {
 
     public String[] read() {
         ArrayList<String> rows = new ArrayList<>();
-        if(!(new File(this.filename)).exists()) return new String[]{"0"};
+        if(!(new File(this.filename)).exists()) return new String[0];
         try (BufferedReader reader = new BufferedReader(new
                 FileReader(this.filename))) {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                rows.add(line);
+                if (!line.isBlank()) rows.add(line);
             }
         } catch (IOException e) {
             System.err.printf("Erreur lors de la lecture du fichier : %s (e : %s)", this.filename, e.getMessage());

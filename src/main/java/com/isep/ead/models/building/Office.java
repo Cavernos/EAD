@@ -17,13 +17,20 @@ public class Office extends Building {
 
     @Override
     public String toCSV() {
-        return id + "," + name + "," + address + "," + surface + "," + numberOfRooms + "," + numberOfEmployees;
+        return id + ",Office," + name + "," + address + "," + surface + "," + organizationId + "," + numberOfRooms + "," + numberOfEmployees;
     }
 
+    @Override
     public Office fromCSV(String[] fields) {
-
-        Office office = new Office(fields[1], fields[2], Double.parseDouble(fields[3]), Integer.parseInt(fields[4]), Integer.parseInt(fields[5]));
+        // format: id,Office,name,address,surface,organizationId[,numberOfRooms,numberOfEmployees]
+        Office office = new Office();
         office.setId(Integer.parseInt(fields[0]));
+        office.setName(fields[2]);
+        office.setAddress(fields[3]);
+        try { office.setSurface(Double.parseDouble(fields[4])); } catch (Exception ignored) {}
+        if (fields.length > 5) try { office.setOrganizationId(Integer.parseInt(fields[5])); } catch (Exception ignored) {}
+        if (fields.length > 6) try { office.setNumberOfRooms(Integer.parseInt(fields[6])); } catch (Exception ignored) {}
+        if (fields.length > 7) try { office.setNumberOfEmployees(Integer.parseInt(fields[7])); } catch (Exception ignored) {}
         return office;
     }
 

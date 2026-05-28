@@ -1,17 +1,15 @@
 package com.isep.ead.models.energy;
 
-
-import com.isep.ead.models.IModel;
-
 import java.time.LocalDate;
 
 /**
  * Classe abstraite représentant une consommation énergétique.
- * L'id est géré par le DAO (auto-incrémenté) et ne figure pas dans le constructeur.
+ * Chaque sous-classe implémente IModel<SousClasse> pour être compatible avec DAO.
  */
-public abstract class Energy implements IModel<Energy> {
+public abstract class Energy {
 
     protected int id;
+    protected int buildingId;
     protected LocalDate date;
     protected double quantity;
     protected double pricePerUnit;
@@ -28,38 +26,20 @@ public abstract class Energy implements IModel<Energy> {
         return quantity * pricePerUnit;
     }
 
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public int getId() {
-        return id;
-    }
+    public int getBuildingId() { return buildingId; }
+    public void setBuildingId(int buildingId) { this.buildingId = buildingId; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) { this.date = date; }
 
-    public LocalDate getDate() {
-        return date;
-    }
+    public double getQuantity() { return quantity; }
+    public void setQuantity(double quantity) { this.quantity = quantity; }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public double getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(double quantity) {
-        this.quantity = quantity;
-    }
-
-    public double getPricePerUnit() {
-        return pricePerUnit;
-    }
-
-    public void setPricePerUnit(double pricePerUnit) {
-        this.pricePerUnit = pricePerUnit;
-    }
+    public double getPricePerUnit() { return pricePerUnit; }
+    public void setPricePerUnit(double pricePerUnit) { this.pricePerUnit = pricePerUnit; }
 
     @Override
     public String toString() {
@@ -69,4 +49,3 @@ public abstract class Energy implements IModel<Energy> {
                 + ", cost=" + String.format("%.2f", getEstimatedCost()) + "€}";
     }
 }
-

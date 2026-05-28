@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" onMouseClicked="#switchToConsoView" prefHeight="170.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #dcdde1; -fx-border-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 8, 0, 0, 4);-fx-cursor: hand" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.isep.ead.controllers.templates.BuildingItemController">
+    <children>
+        <Label text="🏢" textFill="#3498db">
+            <font>
+                <Font size="36.0" />
+            </font>
+        </Label>
+
+        <Label fx:id="lblCardTitle" text="Nom Batiment">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Label>
+
+        <Label fx:id="lblCardBuildings" text="Immeuble" textFill="#7f8c8d">
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Label>
+        <HBox alignment="CENTER" prefHeight="27.0" prefWidth="218.0">
+            <children>
+                <Button fx:id="modifyButton" mnemonicParsing="false" onAction="#onModify" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: white;-fx-cursor: hand;" text="Modifier" />
+                <Button fx:id="cloneButton" mnemonicParsing="false" onAction="#onClone" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: white;-fx-cursor: hand;-fx-text-fill: #1a8ae5;" text="Cloner" />
+                <Button fx:id="deleteButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#onDelete" style="-fx-background-color: white;-fx-cursor: hand;" text="Supprimer" textFill="#c0392b" />
+            </children>
+        </HBox>
+    </children>
+</VBox>

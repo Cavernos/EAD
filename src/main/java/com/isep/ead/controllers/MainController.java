@@ -18,6 +18,8 @@ public class MainController extends ButtonClickController {
     private Button organizationButton;
     @FXML
     private Button dashboardButton;
+    @FXML
+    private Button historiqueButton;
 
     private Parent currentScene;
 
@@ -27,6 +29,7 @@ public class MainController extends ButtonClickController {
         this.buttonAction.put(this.organizationButton, this::organization);
         this.buttonAction.put(this.energyButton, this::energy);
         this.buttonAction.put(this.dashboardButton, this::dashboard);
+        this.buttonAction.put(this.historiqueButton, this::historique);
     }
 
     public void organization() {
@@ -34,12 +37,16 @@ public class MainController extends ButtonClickController {
     }
 
     public void dashboard() {
-        this.switchView("tableau-de-bord-view");
+        DashboardController c = (DashboardController) this.switchView("tableau-de-bord-view");
+        c.refresh();
     }
 
     public void energy() {
+        this.switchView("consomation-graphique");
+    }
 
-
+    public void historique() {
+        this.switchView("historique-consomation-view");
     }
 
     public Controller switchView(String view) {

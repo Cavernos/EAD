@@ -29,8 +29,10 @@ public class Popup {
     public void onSubmit(Runnable action) {
         if (this.controller instanceof FormPopupController controller) {
             controller.setOnSubmitAction(() -> {
-                action.run();
+                // Fermer le popup EN PREMIER pour que le rendu de la fenêtre principale
+                // soit déclenché avant le rafraîchissement du contenu.
                 this.stage.close();
+                javafx.application.Platform.runLater(action);
             });
         }
     }

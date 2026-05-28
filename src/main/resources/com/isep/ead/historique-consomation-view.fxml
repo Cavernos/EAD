@@ -57,7 +57,7 @@
 
       <VBox style="-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 4);" VBox.vgrow="ALWAYS">
          <children>
-            <TableView style="-fx-background-color: transparent; -fx-border-color: #e2e8f0; -fx-border-radius: 5;" VBox.vgrow="ALWAYS">
+            <TableView fx:id="tableView" style="-fx-background-color: transparent; -fx-border-color: #e2e8f0; -fx-border-radius: 5;" VBox.vgrow="ALWAYS">
                <columns>
                   <TableColumn fx:id="colDate" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Date du Relevé" />
                   <TableColumn fx:id="colBuilding1" prefWidth="220.0" style="-fx-alignment: CENTER_LEFT;" text="Organisation" />

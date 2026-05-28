@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class DAO<T extends IModel<T>> implements IDAO<T>{
+public class DAO<T extends IModel<T>> implements IDAO<T> {
+
     public static int idSequence = 1;
     private final CSVHandler csvHandler;
     private final Class<T> model;
@@ -16,6 +17,7 @@ public class DAO<T extends IModel<T>> implements IDAO<T>{
     public DAO(Class<T> model) {
         this(model, model.getSimpleName().toLowerCase() + ".csv");
     }
+
     public DAO(Class<T> model, String filename) {
         this.csvHandler = new CSVHandler(filename);
         idSequence = this.getLastId();
@@ -24,6 +26,7 @@ public class DAO<T extends IModel<T>> implements IDAO<T>{
 
     @Override
     public T create(T model) {
+        idSequence = this.getLastId();
         model.setId(idSequence++);
         this.csvHandler.write(model.toCSV());
         return model;
@@ -45,7 +48,7 @@ public class DAO<T extends IModel<T>> implements IDAO<T>{
         String[] rows = this.csvHandler.read();
         List<T> records = new ArrayList<>();
         for (String row : rows) {
-            if (row.contains(",")){
+            if (row.contains(",")) {
                 T model = Objects.requireNonNull(this.createNewModelInstance()).fromCSV(row.split(","));
                 records.add(model);
             }
@@ -67,6 +70,7 @@ public class DAO<T extends IModel<T>> implements IDAO<T>{
             this.csvHandler.remove(model.getId());
         }
     }
+
     @Override
     public T update(T model) {
         return Objects.requireNonNull(this.createNewModelInstance()).fromCSV(this.csvHandler.update(model.getId(), model.toCSV()).split(","));

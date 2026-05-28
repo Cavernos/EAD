@@ -16,12 +16,19 @@ public class Shop extends Building {
 
     @Override
     public String toCSV() {
-        return id + "," + name + "," + address + "," + surface + "," + activitySector;
+        return id + ",Shop," + name + "," + address + "," + surface + "," + organizationId + "," + activitySector;
     }
 
+    @Override
     public Shop fromCSV(String[] fields) {
-        Shop shop = new Shop(fields[1], fields[2], Double.parseDouble(fields[3]), fields[4]);
+        // format: id,Shop,name,address,surface,organizationId[,activitySector]
+        Shop shop = new Shop();
         shop.setId(Integer.parseInt(fields[0]));
+        shop.setName(fields[2]);
+        shop.setAddress(fields[3]);
+        try { shop.setSurface(Double.parseDouble(fields[4])); } catch (Exception ignored) {}
+        if (fields.length > 5) try { shop.setOrganizationId(Integer.parseInt(fields[5])); } catch (Exception ignored) {}
+        if (fields.length > 6) shop.setActivitySector(fields[6]);
         return shop;
     }
 

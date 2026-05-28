@@ -30,7 +30,7 @@
                     <children>
                         <Label fx:id="lblGraphTitle" style="-fx-font-weight: bold; -fx-font-size: 15px;" text="Visualisation des données " textFill="#34495e" />
 
-                        <BarChart VBox.vgrow="ALWAYS">
+                        <BarChart fx:id="barChart" VBox.vgrow="ALWAYS">
                             <xAxis>
                                 <CategoryAxis label="Période temporelle" side="BOTTOM" fx:id="xAxisTime" />
                             </xAxis>

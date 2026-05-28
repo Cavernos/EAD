@@ -32,11 +32,24 @@ public class SceneManager {
         if (this.viewCache.containsKey(view)) {
             return this.viewCache.get(view);
         }
-
         LoadedView root = this.loadTemplate(view);
-
         this.viewCache.put(view, root);
         return root;
+    }
+
+    /**
+     * Retourne la vue depuis le cache UNIQUEMENT si elle a déjà été chargée.
+     * Ne crée PAS de nouvelle instance. Utile pour les rafraîchissements conditionnels.
+     */
+    public LoadedView getCachedPage(String view) {
+        return this.viewCache.get(view);
+    }
+
+    /**
+     * Supprime une vue du cache pour forcer son rechargement au prochain appel de loadPage().
+     */
+    public void invalidatePage(String view) {
+        this.viewCache.remove(view);
     }
 
 

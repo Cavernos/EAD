@@ -88,6 +88,9 @@ public class Organization implements IModel<Organization> {
     public Organization fromCSV(String[] fields) {
         Organization organization = new Organization(fields[1]);
         organization.setId(Integer.parseInt(fields[0]));
+        if (fields.length > 2 && fields[2] != null && !fields[2].isBlank()) {
+            organization.setOwner(fields[2]);
+        }
         return organization;
     }
 
