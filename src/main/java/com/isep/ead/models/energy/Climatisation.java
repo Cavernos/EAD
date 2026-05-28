@@ -2,6 +2,7 @@ package com.isep.ead.models.energy;
 
 import com.isep.ead.models.IModel;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 public class Climatisation extends Energy implements IModel<Climatisation> {
@@ -29,17 +30,30 @@ public class Climatisation extends Energy implements IModel<Climatisation> {
 
     @Override
     public String toCSV() {
-        return id + "," + buildingId + "," + date + "," + quantity + "," + pricePerUnit + "," + targetTemperature;
+        return id + "," + buildingId + "," + date + "," + time + "," + quantity + "," + pricePerUnit + "," + targetTemperature;
     }
 
     @Override
     public Climatisation fromCSV(String[] fields) {
-        Climatisation climatisation = new Climatisation(
-                LocalDate.parse(fields[2]),
-                Double.parseDouble(fields[3]),
-                Double.parseDouble(fields[4]),
-                Double.parseDouble(fields[5])
-        );
+        // Old format (6 fields): id,buildingId,date,quantity,pricePerUnit,targetTemperature
+        // New format (7 fields): id,buildingId,date,time,quantity,pricePerUnit,targetTemperature
+        Climatisation climatisation;
+        if (fields.length >= 7) {
+            climatisation = new Climatisation(
+                    LocalDate.parse(fields[2]),
+                    Double.parseDouble(fields[4]),
+                    Double.parseDouble(fields[5]),
+                    Double.parseDouble(fields[6])
+            );
+            try { climatisation.setTime(LocalTime.parse(fields[3])); } catch (Exception ignored) {}
+        } else {
+            climatisation = new Climatisation(
+                    LocalDate.parse(fields[2]),
+                    Double.parseDouble(fields[3]),
+                    Double.parseDouble(fields[4]),
+                    Double.parseDouble(fields[5])
+            );
+        }
         climatisation.setId(Integer.parseInt(fields[0]));
         climatisation.setBuildingId(Integer.parseInt(fields[1]));
         return climatisation;

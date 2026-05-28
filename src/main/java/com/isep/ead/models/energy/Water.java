@@ -2,6 +2,7 @@ package com.isep.ead.models.energy;
 
 import com.isep.ead.models.IModel;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 public class Water extends Energy implements IModel<Water> {
@@ -26,17 +27,30 @@ public class Water extends Energy implements IModel<Water> {
 
     @Override
     public String toCSV() {
-        return id + "," + buildingId + "," + date + "," + quantity + "," + pricePerUnit + "," + isHotWater;
+        return id + "," + buildingId + "," + date + "," + time + "," + quantity + "," + pricePerUnit + "," + isHotWater;
     }
 
     @Override
     public Water fromCSV(String[] fields) {
-        Water water = new Water(
-                LocalDate.parse(fields[2]),
-                Double.parseDouble(fields[3]),
-                Double.parseDouble(fields[4]),
-                Boolean.parseBoolean(fields[5])
-        );
+        // Old format (6 fields): id,buildingId,date,quantity,pricePerUnit,isHotWater
+        // New format (7 fields): id,buildingId,date,time,quantity,pricePerUnit,isHotWater
+        Water water;
+        if (fields.length >= 7) {
+            water = new Water(
+                    LocalDate.parse(fields[2]),
+                    Double.parseDouble(fields[4]),
+                    Double.parseDouble(fields[5]),
+                    Boolean.parseBoolean(fields[6])
+            );
+            try { water.setTime(LocalTime.parse(fields[3])); } catch (Exception ignored) {}
+        } else {
+            water = new Water(
+                    LocalDate.parse(fields[2]),
+                    Double.parseDouble(fields[3]),
+                    Double.parseDouble(fields[4]),
+                    Boolean.parseBoolean(fields[5])
+            );
+        }
         water.setId(Integer.parseInt(fields[0]));
         water.setBuildingId(Integer.parseInt(fields[1]));
         return water;

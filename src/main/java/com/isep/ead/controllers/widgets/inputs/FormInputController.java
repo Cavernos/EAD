@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class FormInputController extends Controller {
 
@@ -14,7 +15,8 @@ public class FormInputController extends Controller {
         TEXT,         // texte libre non vide
         DOUBLE,       // nombre décimal (ex: 12.5)
         INTEGER,      // entier
-        DATE          // format AAAA-MM-JJ
+        DATE,         // format AAAA-MM-JJ
+        TIME          // format HH:MM
     }
 
     private static final String STYLE_NORMAL  =
@@ -51,6 +53,7 @@ public class FormInputController extends Controller {
             case DOUBLE  -> "ex : 120.5";
             case INTEGER -> "ex : 42";
             case DATE    -> "AAAA-MM-JJ";
+            case TIME    -> "HH:MM";
             default      -> "";
         };
         if (!prompt.isEmpty()) this.inputField.setPromptText(prompt);
@@ -65,6 +68,7 @@ public class FormInputController extends Controller {
             case DOUBLE  -> isValidDouble(val);
             case INTEGER -> isValidInteger(val);
             case DATE    -> isValidDate(val);
+            case TIME    -> isValidTime(val);
         };
     }
 
@@ -102,6 +106,7 @@ public class FormInputController extends Controller {
             case DOUBLE  -> "Nombre décimal attendu (ex : 120.5).";
             case INTEGER -> "Nombre entier attendu (ex : 42).";
             case DATE    -> "Format AAAA-MM-JJ attendu (ex : 2025-01-15).";
+            case TIME    -> "Format HH:MM attendu (ex : 08:30).";
         };
     }
 
@@ -133,6 +138,11 @@ public class FormInputController extends Controller {
 
     private static boolean isValidDate(String v) {
         try { LocalDate.parse(v); return true; }
+        catch (Exception e) { return false; }
+    }
+
+    private static boolean isValidTime(String v) {
+        try { LocalTime.parse(v); return true; }
         catch (Exception e) { return false; }
     }
 

@@ -30,6 +30,7 @@ public class ConsomationController extends Controller {
     // -- Historique --
     @FXML private TableView<Energy> tableView;
     @FXML private TableColumn<Energy, String> colDate;
+    @FXML private TableColumn<Energy, String> colTime;
     @FXML private TableColumn<Energy, String> colBuilding1;
     @FXML private TableColumn<Energy, String> colBuilding;
     @FXML private TableColumn<Energy, String> colEnergy;
@@ -102,6 +103,7 @@ public class ConsomationController extends Controller {
 
     private void initTableColumns() {
         colDate.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDate().toString()));
+        if (colTime != null) colTime.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getTime().toString()));
         colBuilding1.setCellValueFactory(c -> {
             Building b = buildingDao.getById(c.getValue().getBuildingId());
             if (b == null) return new SimpleStringProperty("—");

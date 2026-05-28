@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -191,6 +192,7 @@ public class BuildingCrudController extends CrudController {
         controller.addComboField("type", "Type d'énergie *",
             new ArrayList<>(List.of("Electricity", "Gas", "Water", "Climatisation")));
         controller.addField("date", "Date *", LocalDate.now().toString(), FormInputController.FieldType.DATE);
+        controller.addField("time", "Heure *", LocalTime.now().withSecond(0).withNano(0).toString(), FormInputController.FieldType.TIME);
         controller.addField("quantity", "Quantité (kWh / m³) *", "", FormInputController.FieldType.DOUBLE);
         controller.addField("price", "Prix unitaire (EUR) *", "", FormInputController.FieldType.DOUBLE);
 
@@ -210,22 +212,27 @@ public class BuildingCrudController extends CrudController {
             try {
                 String type = controller.getValues("type");
                 LocalDate date = LocalDate.parse(controller.getValues("date"));
+                LocalTime time = LocalTime.of(0, 0);
+                try { time = LocalTime.parse(controller.getValues("time")); } catch (Exception ignored) {}
                 double qty = Double.parseDouble(controller.getValues("quantity"));
                 double price = Double.parseDouble(controller.getValues("price"));
                 String extra = controller.getValues("extra");
                 switch (type) {
                     case "Electricity" -> {
                         Electricity e = new Electricity(date, qty, price, "Oui".equals(extra));
+                        e.setTime(time);
                         e.setBuildingId(buildingId);
                         new DAO<>(Electricity.class).create(e);
                     }
                     case "Gas" -> {
                         Gas g = new Gas(date, qty, price);
+                        g.setTime(time);
                         g.setBuildingId(buildingId);
                         new DAO<>(Gas.class).create(g);
                     }
                     case "Water" -> {
                         Water w = new Water(date, qty, price, "Oui".equals(extra));
+                        w.setTime(time);
                         w.setBuildingId(buildingId);
                         new DAO<>(Water.class).create(w);
                     }
@@ -233,6 +240,7 @@ public class BuildingCrudController extends CrudController {
                         double temp = 20.0;
                         try { temp = Double.parseDouble(extra); } catch (Exception ignored) {}
                         Climatisation c = new Climatisation(date, qty, price, temp);
+                        c.setTime(time);
                         c.setBuildingId(buildingId);
                         new DAO<>(Climatisation.class).create(c);
                     }
@@ -319,10 +327,10 @@ public class BuildingCrudController extends CrudController {
         energy.sort(java.util.Comparator.comparing(Energy::getDate));
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-            bw.write("date,type,quantite,prix_unitaire,cout_estime");
+            bw.write("date,heure,type,quantite,prix_unitaire,cout_estime");
             bw.newLine();
             for (Energy e : energy) {
-                bw.write(e.getDate() + "," + e.getClass().getSimpleName() + ","
+                bw.write(e.getDate() + "," + e.getTime() + "," + e.getClass().getSimpleName() + ","
                     + e.getQuantity() + "," + e.getPricePerUnit() + ","
                     + String.format("%.2f", e.getEstimatedCost()));
                 bw.newLine();
@@ -354,7 +362,7 @@ public class BuildingCrudController extends CrudController {
             .filter(b -> b.getOrganizationId() == organization.getId()).toList();
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-            bw.write("batiment,type_batiment,date,type_energie,quantite,prix_unitaire,cout_estime");
+            bw.write("batiment,type_batiment,date,heure,type_energie,quantite,prix_unitaire,cout_estime");
             bw.newLine();
             for (Building b : buildings) {
                 List<Energy> energy = new ArrayList<>();
@@ -366,7 +374,7 @@ public class BuildingCrudController extends CrudController {
                 for (Energy e : energy) {
                     bw.write((b.getName() != null ? b.getName() : "") + ","
                         + b.getClass().getSimpleName() + ","
-                        + e.getDate() + "," + e.getClass().getSimpleName() + ","
+                        + e.getDate() + "," + e.getTime() + "," + e.getClass().getSimpleName() + ","
                         + e.getQuantity() + "," + e.getPricePerUnit() + ","
                         + String.format("%.2f", e.getEstimatedCost()));
                     bw.newLine();
@@ -415,25 +423,39 @@ public class BuildingCrudController extends CrudController {
                 String[] f = line.split(",", -1);
                 if (f.length < 4) { errors++; errorLog.append("Ligne ").append(lineNum).append(": colonnes insuffisantes\n"); continue; }
                 try {
-                    // Expected format: date,type,quantity,pricePerUnit[,extra]
+                    // Supported formats:
+                    //   date,type,quantity,pricePerUnit[,extra]
+                    //   date,time,type,quantity,pricePerUnit[,extra]
                     LocalDate date = LocalDate.parse(f[0].trim());
-                    String type = f[1].trim();
-                    double qty = Double.parseDouble(f[2].trim());
-                    double price = Double.parseDouble(f[3].trim());
-                    String extra = f.length > 4 ? f[4].trim() : "";
+                    // Detect if second field is a time (HH:MM) or a type name
+                    boolean hasTime = f[1].trim().matches("\\d{1,2}:\\d{2}(:\\d{2})?");
+                    LocalTime time = LocalTime.of(0, 0);
+                    int offset = 1;
+                    if (hasTime) {
+                        try { time = LocalTime.parse(f[1].trim()); } catch (Exception ignored) {}
+                        offset = 2;
+                    }
+                    if (f.length < offset + 3) { errors++; errorLog.append("Ligne ").append(lineNum).append(": colonnes insuffisantes\n"); continue; }
+                    String type = f[offset].trim();
+                    double qty = Double.parseDouble(f[offset + 1].trim());
+                    double price = Double.parseDouble(f[offset + 2].trim());
+                    String extra = f.length > offset + 3 ? f[offset + 3].trim() : "";
                     switch (type) {
                         case "Electricity" -> {
                             Electricity e = new Electricity(date, qty, price, "true".equalsIgnoreCase(extra) || "Oui".equalsIgnoreCase(extra) || "1".equals(extra));
+                            e.setTime(time);
                             e.setBuildingId(currentBuildingId);
                             new DAO<>(Electricity.class).create(e);
                         }
                         case "Gas" -> {
                             Gas g = new Gas(date, qty, price);
+                            g.setTime(time);
                             g.setBuildingId(currentBuildingId);
                             new DAO<>(Gas.class).create(g);
                         }
                         case "Water" -> {
                             Water w = new Water(date, qty, price, "true".equalsIgnoreCase(extra) || "Oui".equalsIgnoreCase(extra) || "1".equals(extra));
+                            w.setTime(time);
                             w.setBuildingId(currentBuildingId);
                             new DAO<>(Water.class).create(w);
                         }
@@ -441,6 +463,7 @@ public class BuildingCrudController extends CrudController {
                             double temp = 20.0;
                             try { temp = Double.parseDouble(extra); } catch (Exception ignored) {}
                             Climatisation c = new Climatisation(date, qty, price, temp);
+                            c.setTime(time);
                             c.setBuildingId(currentBuildingId);
                             new DAO<>(Climatisation.class).create(c);
                         }
@@ -495,15 +518,19 @@ public class BuildingCrudController extends CrudController {
             for (int month = 1; month <= 12; month++) {
                 LocalDate d = LocalDate.of(currentYear, month, 1);
                 Electricity e = new Electricity(d, 100 + Math.random() * 400, 0.18, month % 2 == 0);
+                e.setTime(LocalTime.of((int)(Math.random() * 24), (int)(Math.random() * 60)));
                 e.setBuildingId(b.getId());
                 new DAO<>(Electricity.class).create(e);
                 Gas g = new Gas(d, 50 + Math.random() * 200, 0.09);
+                g.setTime(LocalTime.of((int)(Math.random() * 24), (int)(Math.random() * 60)));
                 g.setBuildingId(b.getId());
                 new DAO<>(Gas.class).create(g);
                 Water w = new Water(d, 20 + Math.random() * 80, 0.004, false);
+                w.setTime(LocalTime.of((int)(Math.random() * 24), (int)(Math.random() * 60)));
                 w.setBuildingId(b.getId());
                 new DAO<>(Water.class).create(w);
                 Climatisation c = new Climatisation(d, 30 + Math.random() * 100, 0.20, 22.0);
+                c.setTime(LocalTime.of((int)(Math.random() * 24), (int)(Math.random() * 60)));
                 c.setBuildingId(b.getId());
                 new DAO<>(Climatisation.class).create(c);
             }

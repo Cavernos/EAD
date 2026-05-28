@@ -2,6 +2,7 @@ package com.isep.ead.models.energy;
 
 import com.isep.ead.models.IModel;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
  * Consommation d'électricité.
@@ -29,17 +30,30 @@ public class Electricity extends Energy implements IModel<Electricity> {
 
     @Override
     public String toCSV() {
-        return id + "," + buildingId + "," + date + "," + quantity + "," + pricePerUnit + "," + isOffPeak;
+        return id + "," + buildingId + "," + date + "," + time + "," + quantity + "," + pricePerUnit + "," + isOffPeak;
     }
 
     @Override
     public Electricity fromCSV(String[] fields) {
-        Electricity e = new Electricity(
-                LocalDate.parse(fields[2]),
-                Double.parseDouble(fields[3]),
-                Double.parseDouble(fields[4]),
-                Boolean.parseBoolean(fields[5])
-        );
+        // Old format (6 fields): id,buildingId,date,quantity,pricePerUnit,isOffPeak
+        // New format (7 fields): id,buildingId,date,time,quantity,pricePerUnit,isOffPeak
+        Electricity e;
+        if (fields.length >= 7) {
+            e = new Electricity(
+                    LocalDate.parse(fields[2]),
+                    Double.parseDouble(fields[4]),
+                    Double.parseDouble(fields[5]),
+                    Boolean.parseBoolean(fields[6])
+            );
+            try { e.setTime(LocalTime.parse(fields[3])); } catch (Exception ignored) {}
+        } else {
+            e = new Electricity(
+                    LocalDate.parse(fields[2]),
+                    Double.parseDouble(fields[3]),
+                    Double.parseDouble(fields[4]),
+                    Boolean.parseBoolean(fields[5])
+            );
+        }
         e.setId(Integer.parseInt(fields[0]));
         e.setBuildingId(Integer.parseInt(fields[1]));
         return e;

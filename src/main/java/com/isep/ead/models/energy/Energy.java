@@ -1,6 +1,7 @@
 package com.isep.ead.models.energy;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
  * Classe abstraite représentant une consommation énergétique.
@@ -11,6 +12,7 @@ public abstract class Energy {
     protected int id;
     protected int buildingId;
     protected LocalDate date;
+    protected LocalTime time = LocalTime.of(0, 0);
     protected double quantity;
     protected double pricePerUnit;
 
@@ -34,6 +36,9 @@ public abstract class Energy {
 
     public LocalDate getDate() { return date; }
     public void setDate(LocalDate date) { this.date = date; }
+
+    public LocalTime getTime() { return time; }
+    public void setTime(LocalTime time) { this.time = time; }
 
     public double getQuantity() { return quantity; }
     public void setQuantity(double quantity) { this.quantity = quantity; }

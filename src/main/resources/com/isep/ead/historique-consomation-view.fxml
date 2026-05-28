@@ -59,12 +59,13 @@
          <children>
             <TableView fx:id="tableView" style="-fx-background-color: transparent; -fx-border-color: #e2e8f0; -fx-border-radius: 5;" VBox.vgrow="ALWAYS">
                <columns>
-                  <TableColumn fx:id="colDate" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Date du Relevé" />
-                  <TableColumn fx:id="colBuilding1" prefWidth="220.0" style="-fx-alignment: CENTER_LEFT;" text="Organisation" />
-                  <TableColumn fx:id="colBuilding" prefWidth="220.0" style="-fx-alignment: CENTER_LEFT;" text="Bâtiment / Local" />
-                  <TableColumn fx:id="colEnergy" prefWidth="140.0" style="-fx-alignment: CENTER;" text=" Type d'Énergie" />
-                  <TableColumn fx:id="colAmount" prefWidth="160.0" style="-fx-alignment: CENTER_RIGHT; -fx-font-weight: bold;" text="Quantité Consommée" />
-                  <TableColumn fx:id="colCost" prefWidth="140.0" style="-fx-alignment: CENTER_RIGHT; -fx-text-fill: #2ecc71; -fx-font-weight: bold;" text="Coût Estimé (€)" />
+                  <TableColumn fx:id="colDate" prefWidth="120.0" style="-fx-alignment: CENTER;" text="Date" />
+                  <TableColumn fx:id="colTime" prefWidth="80.0" style="-fx-alignment: CENTER;" text="Heure" />
+                  <TableColumn fx:id="colBuilding1" prefWidth="200.0" style="-fx-alignment: CENTER_LEFT;" text="Organisation" />
+                  <TableColumn fx:id="colBuilding" prefWidth="200.0" style="-fx-alignment: CENTER_LEFT;" text="Bâtiment / Local" />
+                  <TableColumn fx:id="colEnergy" prefWidth="130.0" style="-fx-alignment: CENTER;" text=" Type d'Énergie" />
+                  <TableColumn fx:id="colAmount" prefWidth="150.0" style="-fx-alignment: CENTER_RIGHT; -fx-font-weight: bold;" text="Quantité Consommée" />
+                  <TableColumn fx:id="colCost" prefWidth="130.0" style="-fx-alignment: CENTER_RIGHT; -fx-text-fill: #2ecc71; -fx-font-weight: bold;" text="Coût Estimé (€)" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
