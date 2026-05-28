@@ -117,7 +117,33 @@ public class Building implements IModel<Building> {
     }
 
     private static final java.util.Set<String> KNOWN_TYPES =
-        java.util.Set.of("Building", "House", "Appartment", "Office", "Shop");
+        java.util.Set.of("Building", "House", "Appartment", "Office", "Shop", "School", "UniversityBuilding");
+
+    /** Traduit le nom de classe Java en label français pour l'UI. */
+    public static String toFrench(String className) {
+        return switch (className) {
+            case "House"               -> "Maison";
+            case "Appartment"          -> "Appartement";
+            case "Office"              -> "Bureau";
+            case "Shop"                -> "Boutique";
+            case "School"              -> "École";
+            case "UniversityBuilding"  -> "Université";
+            default                    -> "Bâtiment";
+        };
+    }
+
+    /** Traduit un label français (UI) en nom de classe Java. */
+    public static String fromFrench(String label) {
+        return switch (label) {
+            case "Maison"       -> "House";
+            case "Appartement"  -> "Appartment";
+            case "Bureau"       -> "Office";
+            case "Boutique"     -> "Shop";
+            case "École"        -> "School";
+            case "Université"   -> "UniversityBuilding";
+            default             -> "Building";
+        };
+    }
 
     @Override
     public Building fromCSV(String[] fields) {
@@ -127,11 +153,13 @@ public class Building implements IModel<Building> {
         int offset = newFormat ? 2 : 1;
 
         Building building = newFormat ? switch (fields[1]) {
-            case "House"      -> new House();
-            case "Appartment" -> new Appartment();
-            case "Office"     -> new Office();
-            case "Shop"       -> new Shop();
-            default           -> new Building();
+            case "House"              -> new House();
+            case "Appartment"         -> new Appartment();
+            case "Office"             -> new Office();
+            case "Shop"               -> new Shop();
+            case "School"             -> new School();
+            case "UniversityBuilding" -> new UniversityBuilding();
+            default                   -> new Building();
         } : new Building();
 
         try { building.setId(Integer.parseInt(fields[0])); } catch (Exception ignored) {}

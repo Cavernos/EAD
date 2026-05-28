@@ -4,6 +4,8 @@ import com.isep.ead.controllers.widgets.inputs.FormInputController;
 import com.isep.ead.controllers.widgets.popup.FormPopupController;
 import com.isep.ead.dao.DAO;
 import com.isep.ead.models.building.*;
+import com.isep.ead.models.building.School;
+import com.isep.ead.models.building.UniversityBuilding;
 import com.isep.ead.models.energy.*;
 import com.isep.ead.models.organization.Organization;
 import com.isep.ead.templates.BuildingItem;
@@ -88,14 +90,17 @@ public class BuildingCrudController extends CrudController {
         controller.addField("address", "Adresse *");
         controller.addField("surface", "Surface (m²) *", "", FormInputController.FieldType.DOUBLE);
         controller.addComboField("type", "Type de bâtiment *",
-            new ArrayList<>(List.of("House", "Appartment", "Office", "Shop")));
+            new ArrayList<>(List.of("Maison", "Appartement", "Bureau", "Boutique", "École", "Université")));
         popup.show();
         popup.onSubmit(() -> {
+            String selectedFr = controller.getValues("type");
+            String className = com.isep.ead.models.building.Building.fromFrench(selectedFr);
             Map<String, Supplier<Building>> map = Map.of(
                 "House", House::new, "Appartment", Appartment::new,
-                "Office", Office::new, "Shop", Shop::new
+                "Office", Office::new, "Shop", Shop::new,
+                "School", School::new, "UniversityBuilding", UniversityBuilding::new
             );
-            Building b = map.getOrDefault(controller.getValues("type"), Building::new).get();
+            Building b = map.getOrDefault(className, Building::new).get();
             b.setName(controller.getValues("name"));
             b.setAddress(controller.getValues("address"));
             try { b.setSurface(Double.parseDouble(controller.getValues("surface"))); }
@@ -150,6 +155,10 @@ public class BuildingCrudController extends CrudController {
             Office co = new Office(); co.setNumberOfRooms(of.getNumberOfRooms()); co.setNumberOfEmployees(of.getNumberOfEmployees()); copy = co;
         } else if (original instanceof Shop sh) {
             Shop cs = new Shop(); cs.setActivitySector(sh.getActivitySector()); copy = cs;
+        } else if (original instanceof School sc) {
+            School csc = new School(); csc.setNumberOfStudents(sc.getNumberOfStudents()); copy = csc;
+        } else if (original instanceof UniversityBuilding ub) {
+            UniversityBuilding cub = new UniversityBuilding(); cub.setNumberOfStudents(ub.getNumberOfStudents()); copy = cub;
         } else {
             copy = new Building();
         }
